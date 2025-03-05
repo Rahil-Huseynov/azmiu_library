@@ -1,0 +1,35 @@
+@use "../../../../assets/styles/scss/mixin.scss" as *;
+@use "../../../../assets/styles/scss/variables.scss" as *;
+
+.SidebarNavItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding:  $spacing-md;
+  gap:  $spacing-md;
+  cursor: pointer;
+  border-radius: $border-radius-lg;
+  transition: background-color 0.3s ease-in-out;
+
+  &_Content {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+
+    &_ICON {
+      width: 20px;
+    }
+  }
+
+  &_ICON {
+    width: 15px;
+    height: 15px;
+    transform: rotate(270deg);
+  }
+
+  &.active {
+    background: $background-color-admin-header-open-navbar;
+    color: $white;
+    transition: background-color 0.3s ease-in-out;
+  }
+}

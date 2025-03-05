@@ -1,0 +1,61 @@
+.notfound {
+    position: relative;
+    height: 100vh;
+  
+    &__inner {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 520px;
+      width: 100%;
+      line-height: 1.4;
+      text-align: center;
+    }
+  
+    &__404 {
+      position: relative;
+      height: 500px;
+    }
+  
+    &__title {
+      font-family: 'Cabin', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #262626;
+      margin: 0;
+      letter-spacing: 3px;
+      padding-left: 6px;
+    }
+  
+    &__digits {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 500px;
+      font-weight: 900;
+      margin: 0;
+      color: #262626;
+      text-transform: uppercase;
+      letter-spacing: -40px;
+      margin-left: -20px;
+  
+      span {
+        text-shadow: -8px 0 0 #fff;
+      }
+    }
+  
+    &__description {
+      font-family: 'Cabin', sans-serif;
+      font-size: 20px;
+      font-weight: 400;
+      text-transform: uppercase;
+      color: #000;
+      margin-top: 0;
+      margin-bottom: 25px;
+    }
+  }
+  

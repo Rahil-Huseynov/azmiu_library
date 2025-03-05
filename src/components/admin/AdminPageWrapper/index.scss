@@ -1,0 +1,192 @@
+@use "../../../assets/styles/scss/mixin.scss" as *;
+@use "../../../assets/styles/scss/variables.scss" as *;
+
+.table-container {
+  transition: margin-left 0.3s ease-in-out;
+  padding: $spacing-lg;
+  width: 100%;
+
+  &--open {
+    margin-left: 0;
+  }
+
+  &--closed {
+    margin-left: -300px;
+  }
+}
+
+.AdminPageWrapperContainer {
+  &__header {
+    padding-top: $spacing-sm;
+    padding-bottom: $spacing-xl;
+
+    &__title {
+      font-size: $font-xxl;
+      font-weight: $font-regular;
+    }
+  }
+
+  &__content {
+    padding: $spacing-lg;
+    background-color: #EFF5FC;
+    border-radius: $border-radius-lg;
+
+    &__section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: $spacing-sm;
+
+      &__book__list {
+        font-size: $font-xl;
+        font-weight: $font-extrabold;
+        &__subtitle{
+          font-size: $font-xxxl;
+          font-weight: $font-extrabold;
+        }
+      }
+
+      &__subsection {
+        display: flex;
+        align-items: center;
+        padding-left: $spacing-xxxl;
+        margin-bottom: $spacing-sm;
+        width: 70%;
+
+
+        &__input {
+          width: 100%;
+          font-size: $font-sm;
+          line-height: $font-lg;
+          color: #575756;
+          border: 1px solid #000;
+          border-radius: 10px;
+          transition: all 250ms ease-in-out;
+          background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-size: 18px 18px;
+          background-position: 1% center;
+          height: 48px;
+          padding-left: $spacing-xxl;
+          @media(max-width:480px){
+          padding-left: $spacing-lg;
+          background-position: 3% center;
+
+          }
+        }
+  
+          &::placeholder {
+            color: rgba(87, 87, 86, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+          }
+
+          &:focus {
+            outline: 0;
+          }
+        }
+       
+      }
+      &__sort_container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+  
+        &__item {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          padding: $spacing-xs;
+          min-width: 20%;
+        }
+  
+        &__sort__items {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          gap: $spacing-md;
+          min-width: 80%;
+  
+          #sort-select {
+            padding: $spacing-xs;
+          }
+        }
+      }  
+    }
+
+
+  }
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+
+    &.open {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 50%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 15px;
+
+        .close-btn {
+          cursor: pointer;
+          font-size: 20px;
+          font-weight: bold;
+          background: none;
+          border: none;
+          color: #333;
+        }
+      }
+
+      .modal-body {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        .input-field {
+          margin-bottom: 10px;
+          input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+          }
+        }
+
+        .modal-footer {
+          display: flex;
+          justify-content: flex-end;
+
+          .save-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+
+            &:hover {
+              background-color: #45a049;
+            }
+          }
+        }
+      }
+    }
+  }

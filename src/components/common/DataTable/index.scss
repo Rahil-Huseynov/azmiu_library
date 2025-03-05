@@ -1,0 +1,61 @@
+@use "../../../assets/styles/scss/mixin.scss" as *;
+@use "../../../assets/styles/scss/variables.scss" as *;
+
+.table {
+    width: 100%;
+    text-align: center;
+    border-collapse: separate;
+    border-spacing: $spacing-xxs;
+    padding-top: $spacing-md;
+
+    &_thead {
+        &_tr {
+            background-color: #f4f4f4;
+            border-top-left-radius: $border-radius-xxl;
+            border-top-right-radius: $border-radius-xxl;
+
+            &_th {
+                cursor: pointer;
+
+                &_down_filter {
+                    width: 10px;
+                    margin-left: 10px;
+                    transition: transform 0.3s ease-in-out; 
+                    &.rotate {
+                        transform: rotate(180deg);
+                    }
+                   
+                }
+
+                
+            }
+        }
+    }
+
+    table,
+    th,
+    td {
+        padding: $spacing-md $spacing-lg;
+        font-size: $font-lg;
+    }
+
+    tr {
+        background-color: $white;
+
+        &:hover {
+            background-color: #f9f9f9;
+        }
+    }
+
+    td {
+        font-size: $font-md;
+    }
+}
+
+.table_PaginationContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-top: 1rem;
+}

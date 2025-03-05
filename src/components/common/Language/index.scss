@@ -1,0 +1,24 @@
+@use "../../../assets/styles/scss/mixin.scss" as *;
+@use "../../../assets/styles/scss/variables.scss" as *;
+.LanguageContainer {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding-left: 5px;
+    padding-top: 45px;
+    
+    &_flag {
+        width: 40px;
+        height: 25px;
+        padding: 1px;
+        background-color:blue;
+
+    }
+    
+    & button {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+}

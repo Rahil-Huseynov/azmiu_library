@@ -1,0 +1,104 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  &__content {
+    display: grid;
+    align-items: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    min-width: 50%;
+    min-height: 50%;
+    z-index: 1001;
+  }
+
+  &__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  &__title {
+    font-size: 64px;
+    text-align: center;
+    color: #0a2b77;
+    font-weight: 800;
+    margin-bottom: 40px;
+  }
+
+  &__form {
+    display: flex;
+    padding: 0px 32px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+
+  &__form-field {
+    display: flex;
+    align-items: center;
+    width: 70%;
+    gap: 8px;
+  }
+
+  &__label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  &__input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  &__button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  &__button {
+    padding: 10px 16px;
+    width: 50px;
+    border: none;
+    border-radius: 6px;
+    width: 300px;
+    height: 60px;
+    font-size: 24px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 40px;
+
+    &--confirm {
+      background-color: #2ea44f;
+      color: white;
+
+      &:hover {
+        background-color: #2c974b;
+      }
+    }
+
+    &--cancel {
+      background-color: #ff4742;
+      color: white;
+
+      &:hover {
+        background-color: #d63c37;
+      }
+    }
+  }
+}

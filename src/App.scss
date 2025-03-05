@@ -1,0 +1,16 @@
+@use "./assets/styles/scss/mixin.scss" as *;
+@use "./assets/styles/scss/variables.scss" as *;
+
+.Login_page_flag {
+    width: 30px;
+    height: 20px;
+    display: block;
+}
+
+.Login_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 30px);
+
+}
