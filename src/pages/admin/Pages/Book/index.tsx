@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import AdminPageWrapper from "../../../../components/admin/AdminPageWrapper";
 import { useTranslation } from "react-i18next";
 import down_filter from '../../../../assets/icons/down.png';
-import { useGetBooksQuery } from "../../../../services/Api";
+import { useGetBooksQuery, useAddBookMutation } from "../../../../services/Api";
 
 interface Book {
     id: number;
@@ -20,12 +20,13 @@ interface Book {
 
 const BookPage = () => {
     const { t } = useTranslation();
-    const { data, error, isLoading } = useGetBooksQuery();
+    const { data, error, isLoading } = useGetBooksQuery({});
     const [books, setBooks] = useState<Book[]>([]);
+    const [addBook] = useAddBookMutation();
 
     useEffect(() => {
         if (data?.list) {
-            const formattedBooks = data.list.flat().map((book) => ({
+            const formattedBooks = data.list.flat().map((book: Book) => ({
                 id: book.id,
                 title: book.title,
                 author: book.author,
@@ -42,28 +43,35 @@ const BookPage = () => {
         }
     }, [data]);
 
-    const handleAddBook = (newBook: Partial<Book>) => {
+    const handleAddBook = async (newBook: Partial<Book>, file?: File, image?: File) => {
         if (!newBook.title || !newBook.author || newBook.publicationYear === undefined) {
             return;
         }
-
-        const newBookWithId: Book = {
-            id: books.length > 0 ? Math.max(...books.map(b => b.id)) + 1 : 1,
-            title: newBook.title,
-            author: newBook.author,
-            publicationYear: Number(newBook.publicationYear),
-            bookCode: newBook.bookCode || "N/A",
-            language: newBook.language || "Unknown",
-            description: newBook.description || "No description",
-            status: newBook.status || "Available",
-            pages: newBook.pages || 0,
-            filePath: newBook.filePath || "",
-            createdAt: new Date().toISOString(),
-        };
-
-        setBooks((prevBooks) => [...prevBooks, newBookWithId]);
+    
+        const formData = new FormData();
+        formData.append("title", newBook.title);
+        formData.append("author", newBook.author);
+        formData.append("publicationYear", String(newBook.publicationYear));
+        formData.append("bookCode", newBook.bookCode || "N/A");
+        formData.append("language", newBook.language || "Unknown");
+        formData.append("description", newBook.description || "No description");
+        formData.append("status", newBook.status || "Available");
+        formData.append("pages", String(newBook.pages || 0));
+    
+        if (file) {
+            formData.append("file", file);
+        }
+        if (image) {
+            formData.append("image", image);
+        }
+    
+        try {
+            await addBook(formData).unwrap();
+        } catch (error) {
+            console.error("Failed to add the book:", error);
+        }
     };
-
+    
     if (isLoading) return <p>{t("loading")}</p>;
     if (error) return <p>{t("error_loading_books")}</p>;
 
@@ -83,9 +91,17 @@ const BookPage = () => {
                 { key: "status", label: t('status'), downFilterIcon: down_filter },
             ]}
             formFields={[
+                { name: "categoryId", label: t("categoryId"), type: "text" },
                 { name: "title", label: t("title"), type: "text" },
                 { name: "author", label: t("author"), type: "text" },
-                { name: "publicationYear", label: t("year"), type: "number" },
+                { name: "bookCode", label: t("bookCode"), type: "text" },
+                { name: "publisher", label: t("publisher"), type: "text" },
+                { name: "language", label: t("language"), type: "text" },
+                { name: "description", label: t("description"), type: "text" },
+                { name: "pages", label: t("pages"), type: "number" },
+                { name: "publicationYear", label: t("publicationYear"), type: "number" },
+                { name: "file", label: t("file"), type: "file" },
+                { name: "image", label: t("image"), type: "file" },
             ]}
             items={books}
             onAddItem={handleAddBook}

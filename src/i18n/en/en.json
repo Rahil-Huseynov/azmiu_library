@@ -38,5 +38,13 @@
   "add_new_categories": "Add New Categories",
   "add_new_members": "Add New Members",
   "cancel": "Cancel",
-  "status" : "Status"
+  "status": "Status",
+  "bookCode": "Book Code",
+  "publisher": "Publisher",
+  "language": "Language",
+  "description": "Description",
+  "pages": "Pages",
+  "file": "File",
+  "image": "Image",
+  "publicationYear": "Publication Year"
 }

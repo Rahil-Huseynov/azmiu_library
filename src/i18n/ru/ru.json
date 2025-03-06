@@ -38,6 +38,13 @@
   "add_new_categories": "Добавить Новую Категорию",
   "add_new_members": "Добавить Нового Участника",
   "cancel": "Отмена",
-  "status" : "Статус"
-
+  "status": "Статус",
+  "bookCode": "Код книги",
+  "publisher": "Издательство",
+  "language": "Язык",
+  "description": "Описание",
+  "pages": "Количество страниц",
+  "file": "Файл",
+  "image": "Изображение",
+  "publicationYear": "Год издания"
 }

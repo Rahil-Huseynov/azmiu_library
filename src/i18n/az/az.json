@@ -38,5 +38,12 @@
   "add_new_categories": "Yeni Kateqoriya Əlavə Et",
   "add_new_members": "Yeni İstifadəçi Əlavə Et",
   "cancel" : "Ləğv edin",
-  "status" : "Status"
+  "bookCode": "Kitab Kodu",
+  "publisher": "Nəşriyyat",
+  "language": "Dil",
+  "description": "Təsvir",
+  "pages": "Səhifə sayı",
+  "file": "Fayl",
+  "image": "Şəkil",
+  "publicationYear": "Nəşr ili"
 }
