@@ -1,9 +1,10 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import './index.scss';
 import { TextField, Button } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/system';
 import { t } from 'i18next';
+import { Book } from '../../../pages/admin/Pages/Book';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -24,7 +25,7 @@ interface FormField {
 interface ModalProps {
     isOpen: boolean;
     closeModal: () => void;
-    handleSubmit: (e: React.FormEvent) => void;
+    handleSubmit: (newBook: Partial<Book>, file?: File, image?: File) => void;
     formFields: FormField[];
     newItem: Record<string, string>;
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -33,48 +34,47 @@ interface ModalProps {
 }
 
 const Modal: FC<ModalProps> = ({ isOpen, closeModal, handleSubmit, formFields, newItem, handleInputChange, add_new_item, add_item }) => {
-    const [fileName, setFileName] = useState<string>('');
-    const [imageFileName, setImageFileName] = useState<string>('')
-
-    useEffect(() => {
-        const handleEscape = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') closeModal();
-        };
-
-        if (isOpen) {
-            document.addEventListener('keydown', handleEscape);
-        } else {
-            document.removeEventListener('keydown', handleEscape);
-        }
-
-        return () => {
-            document.removeEventListener('keydown', handleEscape);
-        };
-    }, [isOpen, closeModal]);
-
-    if (!isOpen) return null;
-
-    const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        if (event.target === event.currentTarget) closeModal();
-    };
+    const [file, setFile] = useState<File | null>(null);
+    const [image, setImage] = useState<File | null>(null);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
-        const file = event.target.files ? event.target.files[0] : null;
-        if (file) {
+        const selectedFile = event.target.files ? event.target.files[0] : null;
+        if (selectedFile) {
             if (fieldName === "image") {
-                setImageFileName(file.name);
+                setImage(selectedFile);
             } else {
-                setFileName(file.name);
+                setFile(selectedFile);
             }
         }
     };
 
+    const handleFormSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        handleSubmit(newItem, file || undefined, image || undefined);
+
+        const initialItem = formFields.reduce((acc, field) => {
+            acc[field.name] = "";
+            return acc;
+        }, {} as Record<string, string>);
+
+        Object.keys(initialItem).forEach((key) => {
+            handleInputChange({
+                target: { name: key, value: "" },
+            } as React.ChangeEvent<HTMLInputElement>);
+        });
+
+        setFile(null); 
+        setImage(null);
+    };
+
+    if (!isOpen) return null;
+
     return (
-        <div className="modal open" onClick={handleOverlayClick}>
+        <div className="modal open" onClick={(e) => e.target === e.currentTarget && closeModal()}>
             <div className="modal__content">
                 <span className="modal__close" onClick={closeModal}>&times;</span>
                 <p className='modal__title'>{add_new_item}</p>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleFormSubmit}>
                     <div className='modal__form'>
                         {formFields.map((field) => (
                             <div key={field.name} className="modal__form-field">
@@ -95,20 +95,20 @@ const Modal: FC<ModalProps> = ({ isOpen, closeModal, handleSubmit, formFields, n
                                                         type="file"
                                                         name={field.name}
                                                         onChange={(event) => handleFileChange(event, field.name)}
-                                                        multiple
                                                     />
                                                 </Button>
+
                                                 <div className="modal__file-preview-container">
                                                     {field.name === "image" ? (
-                                                        imageFileName && (
+                                                        image && (
                                                             <div className="modal__image-preview">
-                                                                <p>{imageFileName}</p>
+                                                                <p>{image.name}</p>
                                                             </div>
                                                         )
                                                     ) : (
-                                                        fileName &&
+                                                        file &&
                                                         <div className="modal__image-preview">
-                                                            <p>{fileName}</p>
+                                                            <p>{file.name}</p>
                                                         </div>
                                                     )}
                                                 </div>

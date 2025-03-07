@@ -4,17 +4,21 @@ import { useTranslation } from "react-i18next";
 import down_filter from '../../../../assets/icons/down.png';
 import { useGetBooksQuery, useAddBookMutation } from "../../../../services/Api";
 
-interface Book {
+export interface Book {
+    categoryId: number;
     id: number;
     title: string;
     author: string;
     publicationYear: number;
+    publisher: string;
     bookCode: string;
     language: string;
     description: string;
     status: string;
     pages: number;
     filePath: string;
+    file: string;
+    image: string;
     createdAt: string;
 }
 
@@ -47,31 +51,36 @@ const BookPage = () => {
         if (!newBook.title || !newBook.author || newBook.publicationYear === undefined) {
             return;
         }
-    
+
         const formData = new FormData();
+        formData.append("categoryId", String(newBook.categoryId || ""));
         formData.append("title", newBook.title);
         formData.append("author", newBook.author);
         formData.append("publicationYear", String(newBook.publicationYear));
         formData.append("bookCode", newBook.bookCode || "N/A");
         formData.append("language", newBook.language || "Unknown");
         formData.append("description", newBook.description || "No description");
-        formData.append("status", newBook.status || "Available");
         formData.append("pages", String(newBook.pages || 0));
-    
+        formData.append("publisher", newBook.publisher || "");
+
         if (file) {
             formData.append("file", file);
+        } else {
+            return;
         }
+
         if (image) {
             formData.append("image", image);
+        } else {
+            return;
         }
-    
+        
         try {
             await addBook(formData).unwrap();
         } catch (error) {
-            console.error("Failed to add the book:", error);
         }
     };
-    
+
     if (isLoading) return <p>{t("loading")}</p>;
     if (error) return <p>{t("error_loading_books")}</p>;
 

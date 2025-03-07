@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import Sort from "../../common/Sort/index.tsx";
 import { Column } from "../../common/DataTable/index.tsx";
 import Button from "../../common/Button/index.tsx";
+import { Book } from '../../../pages/admin/Pages/Book';
 
 interface AdminPageWrapperProps {
     resourceName: string;
@@ -18,7 +19,7 @@ interface AdminPageWrapperProps {
     columns: Column[];
     formFields: { name: string; label: string; type: string }[];
     items: Record<string, any>[];
-    onAddItem: (newItem: Record<string, any>) => void;
+    onAddItem: (newItem: Record<string, any>, file?: File, image?: File) => void;
     sortOptions?: { value: string; label: string }[];
 }
 
@@ -55,9 +56,8 @@ const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
         setNewItem((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        onAddItem(newItem);
+    const handleSubmit = (newBook: Partial<Book>, file?: File, image?: File) => {
+        onAddItem(newBook, file, image);
         setIsModalOpen(false);
         setNewItem(
             formFields.reduce((acc, field) => ({ ...acc, [field.name]: "" }), {})
