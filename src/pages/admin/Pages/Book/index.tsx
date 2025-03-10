@@ -62,27 +62,16 @@ const BookPage = () => {
         formData.append("description", newBook.description || "No description");
         formData.append("pages", String(newBook.pages || 0));
         formData.append("publisher", newBook.publisher || "");
-
-        if (file) {
-            formData.append("file", file);
-        } else {
-            return;
-        }
-
-        if (image) {
-            formData.append("image", image);
-        } else {
-            return;
-        }
-        
+        formData.append("file", file ? file : "");
+        formData.append("image", image ? image : "");
         try {
             await addBook(formData).unwrap();
         } catch (error) {
         }
     };
 
-    if (isLoading) return <p>{t("loading")}</p>;
-    if (error) return <p>{t("error_loading_books")}</p>;
+    // if (isLoading) return <p>{t("loading")}</p>;
+    // if (error) return <p>{t("error_loading_books")}</p>;
 
     return (
         <AdminPageWrapper
