@@ -14,7 +14,14 @@ export const booksApi = createApi({
         body: newBook,
       }),
     }),
+    updateBook: builder.mutation({
+      query: ({ id, body }: { id: number; body: FormData }) => ({
+        url: `/books/${id}`,
+        method: 'PUT',
+        body: body,
+      }),
+    }),    
   }),
 });
 
-export const { useGetBooksQuery, useAddBookMutation } = booksApi;
+export const { useGetBooksQuery, useAddBookMutation, useUpdateBookMutation } = booksApi;

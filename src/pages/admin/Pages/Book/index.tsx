@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import AdminPageWrapper from "../../../../components/admin/AdminPageWrapper";
 import { useTranslation } from "react-i18next";
 import down_filter from '../../../../assets/icons/down.png';
-import { useGetBooksQuery, useAddBookMutation } from "../../../../services/Api";
+import edit from '../../../../assets/icons/edit.png';
+import deleteitemicon from '../../../../assets/icons/delete.png';
+import { useGetBooksQuery, useAddBookMutation, useUpdateBookMutation } from "../../../../services/Api";
+import Modal from "../../../../components/admin/Modal";
 
 export interface Book {
     categoryId: number;
@@ -22,32 +25,40 @@ export interface Book {
     createdAt: string;
 }
 
-const BookPage = () => {
+const BookPage: React.FC = () => {
     const { t } = useTranslation();
     const { data, error, isLoading } = useGetBooksQuery({});
     const [books, setBooks] = useState<Book[]>([]);
     const [addBook] = useAddBookMutation();
+    const [updateBook] = useUpdateBookMutation();
+    const [editingBook, setEditingBook] = useState<Book | null>(null);
+    const [editItem, setEditItem] = useState<Record<string, string>>({});
 
     useEffect(() => {
         if (data?.list) {
             const formattedBooks = data.list.flat().map((book: Book) => ({
-                id: book.id,
-                title: book.title,
-                author: book.author,
-                publicationYear: book.publicationYear,
-                bookCode: book.bookCode,
-                language: book.language,
-                description: book.description,
-                status: book.status,
-                pages: book.pages,
-                filePath: book.filePath,
-                createdAt: book.createdAt,
+                ...book,
+                edit: (
+                    <img
+                        src={edit}
+                        alt="edit"
+                        style={{ width: "20px", cursor: "pointer" }}
+                        onClick={() => setEditingBook(book)}
+                    />
+                ),
+                deleteitemicon: (
+                    <img
+                        src={deleteitemicon}
+                        alt="deleteitemicon"
+                        style={{ width: "20px", cursor: "pointer" }}
+                    />
+                )
             }));
             setBooks(formattedBooks);
         }
     }, [data]);
 
-    const handleAddBook = async (newBook: Partial<Book>, file?: File, image?: File) => {
+    const handleAddOrUpdateBook = async (newBook: Partial<Book>, file?: File, image?: File): Promise<void> => {
         if (!newBook.title || !newBook.author || newBook.publicationYear === undefined) {
             return;
         }
@@ -64,56 +75,117 @@ const BookPage = () => {
         formData.append("publisher", newBook.publisher || "");
         formData.append("file", file ? file : new Blob([], { type: "text/plain" }));
         formData.append("image", image ? image : new Blob([], { type: "text/plain" }));
-    
 
-        
-
-        
         try {
-            await addBook(formData).unwrap();
-        } catch (error) {
+            if (newBook.id) {
+                await updateBook({ id: newBook.id, body: formData }).unwrap();
+            } else {
+                await addBook(formData).unwrap();
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setEditingBook(null);
+            setEditItem({});
         }
+    };
+
+    useEffect(() => {
+        if (editingBook) {
+            setEditItem({
+                categoryId: editingBook.categoryId ? editingBook.categoryId.toString() : '',
+                title: editingBook.title || '',
+                author: editingBook.author || '',
+                bookCode: editingBook.bookCode || '',
+                publisher: editingBook.publisher || '',
+                language: editingBook.language || '',
+                description: editingBook.description || '',
+                pages: editingBook.pages ? editingBook.pages.toString() : '',
+                publicationYear: editingBook.publicationYear ? editingBook.publicationYear.toString() : '',
+                file: "",
+                image: ""
+            });
+        }
+    }, [editingBook]);
+
+    const handleEditInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const { name, value } = e.target;
+        setEditItem(prev => ({ ...prev, [name]: value }));
     };
 
     if (isLoading) return <p>{t("loading")}</p>;
     if (error) return <p>{t("error_loading_books")}</p>;
 
     return (
-        <AdminPageWrapper
-            resourceName={t('book')}
-            searchtag={t('search_book')}
-            all_item={t('allBooks')}
-            add_item={t('add_book')}
-            text_button={t('add_item')}
-            add_new_item={t('add_new_book')}
-            columns={[
-                { key: "id", label: '№', downFilterIcon: down_filter },
-                { key: "title", label: t("title"), downFilterIcon: down_filter },
-                { key: "author", label: t("author"), downFilterIcon: down_filter },
-                { key: "publicationYear", label: t("year"), downFilterIcon: down_filter },
-                { key: "status", label: t('status'), downFilterIcon: down_filter },
-            ]}
-            formFields={[
-                { name: "categoryId", label: t("categoryId"), type: "text" },
-                { name: "title", label: t("title"), type: "text" },
-                { name: "author", label: t("author"), type: "text" },
-                { name: "bookCode", label: t("bookCode"), type: "text" },
-                { name: "publisher", label: t("publisher"), type: "text" },
-                { name: "language", label: t("language"), type: "text" },
-                { name: "description", label: t("description"), type: "text" },
-                { name: "pages", label: t("pages"), type: "number" },
-                { name: "publicationYear", label: t("publicationYear"), type: "number" },
-                { name: "file", label: t("file"), type: "file" },
-                { name: "image", label: t("image"), type: "file" },
-            ]}
-            items={books}
-            onAddItem={handleAddBook}
-            sortOptions={[
-                { value: "new", label: t("sortitem_newest") },
-                { value: "old", label: t("sortitem_oldest") },
-                { value: "title", label: t("sortitem_by_title") },
-            ]}
-        />
+        <>
+            <AdminPageWrapper
+                resourceName={t('book')}
+                searchtag={t('search_book')}
+                all_item={t('allBooks')}
+                add_item={t('add_book')}
+                text_button={t('add_item')}
+                add_new_item={t('add_new_book')}
+                columns={[
+                    { key: "id", label: '№', downFilterIcon: down_filter },
+                    { key: "title", label: t("title"), downFilterIcon: down_filter },
+                    { key: "author", label: t("author"), downFilterIcon: down_filter },
+                    { key: "publicationYear", label: t("year"), downFilterIcon: down_filter },
+                    { key: "status", label: t('status'), downFilterIcon: down_filter },
+                    { key: "edit", label: t('edit') },
+                    { key: "deleteitemicon", label: t('delete') },
+                ]}
+                formFields={[
+                    { name: "categoryId", label: t("categoryId"), type: "text" },
+                    { name: "title", label: t("title"), type: "text" },
+                    { name: "author", label: t("author"), type: "text" },
+                    { name: "bookCode", label: t("bookCode"), type: "text" },
+                    { name: "publisher", label: t("publisher"), type: "text" },
+                    { name: "language", label: t("language"), type: "text" },
+                    { name: "description", label: t("description"), type: "text" },
+                    { name: "pages", label: t("pages"), type: "number" },
+                    { name: "publicationYear", label: t("publicationYear"), type: "number" },
+                    { name: "file", label: t("file"), type: "file" },
+                    { name: "image", label: t("image"), type: "file" },
+                ]}
+                items={books}
+                onAddItem={handleAddOrUpdateBook}
+                sortOptions={[
+                    { value: "new", label: t("sortitem_newest") },
+                    { value: "old", label: t("sortitem_oldest") },
+                    { value: "title", label: t("sortitem_by_title") },
+                ]}
+            />
+
+            {editingBook && (
+                <Modal
+                    isOpen={true}
+                    closeModal={() => {
+                        setEditingBook(null);
+                        setEditItem({});
+                    }}
+                    handleSubmit={(_book: Partial<Book>, file?: File, image?: File): void => {
+                        void handleAddOrUpdateBook({ ...editingBook, ...editItem }, file, image);
+                    }}
+                    formFields={[
+                        { name: "categoryId", label: t("categoryId"), type: "text" },
+                        { name: "title", label: t("title"), type: "text" },
+                        { name: "author", label: t("author"), type: "text" },
+                        { name: "bookCode", label: t("bookCode"), type: "text" },
+                        { name: "publisher", label: t("publisher"), type: "text" },
+                        { name: "language", label: t("language"), type: "text" },
+                        { name: "description", label: t("description"), type: "text" },
+                        { name: "pages", label: t("pages"), type: "number" },
+                        { name: "publicationYear", label: t("publicationYear"), type: "number" },
+                        { name: "file", label: t("file"), type: "file" },
+                        { name: "image", label: t("image"), type: "file" },
+                    ]}
+                    newItem={editItem}
+                    handleInputChange={handleEditInputChange}
+                    add_item={t("edit_book")}
+                    add_new_item={t("edit_book")}
+                />
+            )}
+        </>
     );
 };
 
