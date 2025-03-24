@@ -64,14 +64,14 @@ const BookPage: React.FC = () => {
         }
 
         const formData = new FormData();
-        formData.append("categoryId", String(newBook.categoryId || ""));
+        formData.append("categoryId", newBook.categoryId ? String(newBook.categoryId) : "");
         formData.append("title", newBook.title);
         formData.append("author", newBook.author);
         formData.append("publicationYear", String(newBook.publicationYear));
         formData.append("bookCode", newBook.bookCode || "N/A");
         formData.append("language", newBook.language || "Unknown");
         formData.append("description", newBook.description || "No description");
-        formData.append("pages", String(newBook.pages || 0));
+        formData.append("pages", newBook.pages ? String(newBook.pages) : "0");
         formData.append("publisher", newBook.publisher || "");
         formData.append("file", file ? file : new Blob([], { type: "text/plain" }));
         formData.append("image", image ? image : new Blob([], { type: "text/plain" }));
