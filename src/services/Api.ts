@@ -3,25 +3,33 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const booksApi = createApi({
   reducerPath: 'booksApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:7777/v1/' }),
+  tagTypes: ['Books'],
   endpoints: (builder) => ({
     getBooks: builder.query({
       query: () => '/books/sorted',
+      providesTags: ['Books']
     }),
     addBook: builder.mutation({
-      query: (newBook) => ({
+      query: (formData) => ({
         url: '/bookInventory',
         method: 'POST',
-        body: newBook,
+        body: formData,
       }),
+      invalidatesTags: ['Books']
     }),
     updateBook: builder.mutation({
-      query: ({ id, body }: { id: number; body: FormData }) => ({
+      query: ({ id, body }) => ({
         url: `/books/${id}`,
         method: 'PUT',
         body: body,
       }),
-    }),    
+      invalidatesTags: ['Books']
+    }),
   }),
 });
 
-export const { useGetBooksQuery, useAddBookMutation, useUpdateBookMutation } = booksApi;
+export const {
+  useGetBooksQuery,
+  useAddBookMutation,
+  useUpdateBookMutation
+} = booksApi;

@@ -21,8 +21,8 @@ interface AdminPageWrapperProps {
     items: Record<string, any>[];
     onAddItem: (newItem: Record<string, any>, file?: File, image?: File) => void;
     sortOptions?: { value: string; label: string }[];
-    // Yeni prop: redaktə ediləcək kitab
     editingItem?: Book | null;
+    onAddClick?: () => void; // Added this line to fix the error
 }
 
 const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
@@ -37,6 +37,7 @@ const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
     onAddItem,
     sortOptions = [],
     editingItem,
+    onAddClick, // Added this line
 }) => {
     const { isSidebarOpen } = useSidebar();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,12 +45,11 @@ const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
     const [searchQuery, setSearchQuery] = useState("");
     const { t } = useTranslation();
 
-    // Modal açılmadan əvvəl redaktə varsa, formu onun məlumatları ilə doldurun
     useEffect(() => {
         if (editingItem) {
             const prefill = formFields.reduce((acc, field) => {
-                // Əgər editingItem-da müvafiq sahə varsa, onu yükləyin
-                acc[field.name] = editingItem[field.name as keyof Book] ? String(editingItem[field.name as keyof Book]) : "";
+                const value = editingItem[field.name as keyof Book];
+                acc[field.name] = value !== undefined ? String(value) : "";
                 return acc;
             }, {} as Record<string, string>);
             setNewItem(prefill);
@@ -63,7 +63,14 @@ const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
         }
     }, [editingItem, formFields]);
 
-    const handleAddClick = () => setIsModalOpen(true);
+    const handleAddClick = () => {
+        if (onAddClick) {
+            onAddClick();
+        } else {
+            setIsModalOpen(true);
+        }
+    };
+
     const handleModalClose = () => {
         setIsModalOpen(false);
     };
@@ -76,7 +83,6 @@ const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
     const handleSubmit = (newBook: Partial<Book>, file?: File, image?: File) => {
         onAddItem(newBook, file, image);
         setIsModalOpen(false);
-        // Formu sıfırlamaq
         setNewItem(
             formFields.reduce((acc, field) => ({ ...acc, [field.name]: "" }), {})
         );
@@ -85,8 +91,7 @@ const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
     const filteredItems = items.filter((item) =>
         columns.some((col) =>
             String(item[col.key]).toLowerCase().includes(searchQuery.toLowerCase())
-        )
-    );
+        ));
 
     return (
         <div className={`table-container ${isSidebarOpen ? "table-container--open" : "table-container--closed"}`}>

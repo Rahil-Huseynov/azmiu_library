@@ -33,6 +33,7 @@ const BookPage: React.FC = () => {
   const [updateBook] = useUpdateBookMutation();
   const [editingBook, setEditingBook] = useState<Book | null>(null);
   const [editItem, setEditItem] = useState<Record<string, string>>({});
+  const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     if (data?.list) {
@@ -84,7 +85,7 @@ const BookPage: React.FC = () => {
 
   const handleAddBook = async (newBook: Partial<Book>, file?: File, image?: File) => {
     if (!newBook.title || !newBook.author || !newBook.publicationYear) {
-      console.error("Required fields are missing");
+      console.error("Title, author and publication year are required");
       return;
     }
 
@@ -93,6 +94,7 @@ const BookPage: React.FC = () => {
     formData.append("author", newBook.author);
     formData.append("publicationYear", newBook.publicationYear.toString());
     
+    // Optional fields
     if (newBook.categoryId) formData.append("categoryId", newBook.categoryId.toString());
     if (newBook.bookCode) formData.append("bookCode", newBook.bookCode);
     if (newBook.language) formData.append("language", newBook.language);
@@ -105,28 +107,36 @@ const BookPage: React.FC = () => {
 
     try {
       await addBook(formData).unwrap();
+      setShowAddModal(false);
     } catch (err) {
       console.error("Error adding book:", err);
     }
   };
 
   const handleUpdateBook = async (bookId: number, updatedBook: Partial<Book>, file?: File, image?: File) => {
-    if (!bookId || !editingBook) {
-      console.error("Missing book ID or editing book data");
+    if (!bookId) {
+      console.error("Book ID is required for update");
+      return;
+    }
+
+    if (!editingBook) {
+      console.error("No book data available for update");
       return;
     }
 
     const formData = new FormData();
     
+    // Required fields
     formData.append("title", updatedBook.title || editingBook.title || "");
     formData.append("author", updatedBook.author || editingBook.author || "");
     formData.append("publicationYear", 
-      (updatedBook.publicationYear || editingBook.publicationYear)?.toString() || ""
+      (updatedBook.publicationYear ?? editingBook.publicationYear)?.toString() || ""
     );
     
+    // Optional fields
     if (updatedBook.categoryId || editingBook.categoryId) {
       formData.append("categoryId", 
-        (updatedBook.categoryId || editingBook.categoryId)?.toString() || ""
+        (updatedBook.categoryId ?? editingBook.categoryId)?.toString() || ""
       );
     }
     
@@ -134,10 +144,11 @@ const BookPage: React.FC = () => {
     formData.append("language", updatedBook.language || editingBook.language || "");
     formData.append("description", updatedBook.description || editingBook.description || "");
     formData.append("pages", 
-      (updatedBook.pages || editingBook.pages)?.toString() || "0"
+      (updatedBook.pages ?? editingBook.pages)?.toString() || "0"
     );
     formData.append("publisher", updatedBook.publisher || editingBook.publisher || "");
 
+    // File handling
     try {
       if (file) {
         formData.append("file", file);
@@ -153,6 +164,7 @@ const BookPage: React.FC = () => {
       console.error("Error handling file:", fileErr);
     }
 
+    // Image handling
     try {
       if (image) {
         formData.append("image", image);
@@ -192,6 +204,7 @@ const BookPage: React.FC = () => {
         add_item={t('add_book')}
         text_button={t('add_item')}
         add_new_item={t('add_new_book')}
+        onAddClick={() => setShowAddModal(true)}
         columns={[
           { key: "id", label: '№', downFilterIcon: down_filter },
           { key: "title", label: t("title"), downFilterIcon: down_filter },
@@ -223,6 +236,33 @@ const BookPage: React.FC = () => {
         ]}
       />
 
+      {/* Add Book Modal */}
+      {showAddModal && (
+        <Modal
+          isOpen={true}
+          closeModal={() => setShowAddModal(false)}
+          handleSubmit={handleAddBook}
+          formFields={[
+            { name: "categoryId", label: t("categoryId"), type: "text" },
+            { name: "title", label: t("title"), type: "text" },
+            { name: "author", label: t("author"), type: "text" },
+            { name: "bookCode", label: t("bookCode"), type: "text" },
+            { name: "publisher", label: t("publisher"), type: "text" },
+            { name: "language", label: t("language"), type: "text" },
+            { name: "description", label: t("description"), type: "text" },
+            { name: "pages", label: t("pages"), type: "number" },
+            { name: "publicationYear", label: t("publicationYear"), type: "number" },
+            { name: "file", label: t("file"), type: "file" },
+            { name: "image", label: t("image"), type: "file" },
+          ]}
+          newItem={{}}
+          handleInputChange={(e) => setEditItem(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+          add_item={t("add_book")}
+          add_new_item={t("add_new_book")}
+        />
+      )}
+
+      {/* Edit Book Modal */}
       {editingBook && (
         <Modal
           isOpen={true}
@@ -231,7 +271,9 @@ const BookPage: React.FC = () => {
             setEditItem({});
           }}
           handleSubmit={(updatedBook: Partial<Book>, file?: File, image?: File) => {
-            handleUpdateBook(editingBook.id || 0, updatedBook, file, image);
+            if (editingBook.id) {
+              handleUpdateBook(editingBook.id, updatedBook, file, image);
+            }
           }}
           formFields={[
             { name: "categoryId", label: t("categoryId"), type: "text" },
