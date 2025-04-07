@@ -46,5 +46,8 @@
   "pages": "Количество страниц",
   "file": "Файл",
   "image": "Изображение",
-  "publicationYear": "Год издания"
+  "publicationYear": "Год издания",
+  "confirm_delete": "Вы уверены, что хотите удалить?",
+  "edit_item": "Редактировать",
+  "delete_item": "Удалить"
 }

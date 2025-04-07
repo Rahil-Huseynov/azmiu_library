@@ -63,7 +63,7 @@ const Modal: FC<ModalProps> = ({ isOpen, closeModal, handleSubmit, formFields, n
             } as React.ChangeEvent<HTMLInputElement>);
         });
 
-        setFile(null); 
+        setFile(null);
         setImage(null);
     };
 
@@ -100,16 +100,15 @@ const Modal: FC<ModalProps> = ({ isOpen, closeModal, handleSubmit, formFields, n
 
                                                 <div className="modal__file-preview-container">
                                                     {field.name === "image" ? (
-                                                        image && (
-                                                            <div className="modal__image-preview">
-                                                                <p>{image.name}</p>
-                                                            </div>
-                                                        )
+                                                        <>
+                                                            {image && <p>{image.name}</p>}
+                                                            {!image && newItem.image && <p>{newItem.image}</p>}
+                                                        </>
                                                     ) : (
-                                                        file &&
-                                                        <div className="modal__image-preview">
-                                                            <p>{file.name}</p>
-                                                        </div>
+                                                        <>
+                                                            {file && <p>{file.name}</p>}
+                                                            {!file && newItem.file && <p>{newItem.file}</p>}
+                                                        </>
                                                     )}
                                                 </div>
                                             </div>

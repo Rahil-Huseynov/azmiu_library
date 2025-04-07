@@ -28,8 +28,8 @@
   "za": "Z-A",
   "categoryname": "Kateqoriya Adı",
   "categorydescription": "Təsvir",
-  "none":"Heç biri",
-  "membersname":"İstifadəçi adı",
+  "none": "Heç biri",
+  "membersname": "İstifadəçi adı",
   "membersdescription": "Təsvir",
   "add_book": "Kitab Əlavə Et",
   "add_categories": "Kateqoriya Əlavə Et",
@@ -37,7 +37,7 @@
   "add_new_book": "Yeni Kitab Əlavə Et",
   "add_new_categories": "Yeni Kateqoriya Əlavə Et",
   "add_new_members": "Yeni İstifadəçi Əlavə Et",
-  "cancel" : "Ləğv edin",
+  "cancel": "Ləğv edin",
   "bookCode": "Kitab Kodu",
   "publisher": "Nəşriyyat",
   "language": "Dil",
@@ -45,5 +45,8 @@
   "pages": "Səhifə sayı",
   "file": "Fayl",
   "image": "Şəkil",
-  "publicationYear": "Nəşr ili"
+  "publicationYear": "Nəşr ili",
+  "confirm_delete": "Silmək istədiyinizə əminsiniz?",
+  "edit_item": "Redaktə et",
+  "delete_item": "Sil"
 }

@@ -46,5 +46,8 @@
   "pages": "Pages",
   "file": "File",
   "image": "Image",
-  "publicationYear": "Publication Year"
+  "publicationYear": "Publication Year",
+  "confirm_delete": "Are you sure you want to delete?",
+  "edit_item": "Edit",
+  "delete_item": "Delete"
 }
