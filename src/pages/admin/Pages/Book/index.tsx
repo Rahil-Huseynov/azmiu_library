@@ -21,13 +21,13 @@ export interface Book {
   pages: number;
   filePath: string;
   file: string;
-  image: string;
+  imagePath: string;
   createdAt: string;
 }
 
 const BookPage: React.FC = () => {
   const { t } = useTranslation();
-  const { data, error, isLoading } = useGetBooksQuery({});
+  const { data: BookData, error, isLoading } = useGetBooksQuery({});
   const [addBook] = useAddBookMutation();
   const [updateBook] = useUpdateBookMutation();
   const [deleteBook] = useDeleteBookMutation();
@@ -36,8 +36,8 @@ const BookPage: React.FC = () => {
   const [editItem, setEditItem] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    if (data?.list) {
-      const formattedBooks = data.list.flat().map((book: Book, index: number) => ({
+    if (BookData?.list) {
+      const formattedBooks = BookData.list.flat().map((book: Book, index: number) => ({
         ...book,
         number: index + 1,
         edit: (
@@ -66,11 +66,11 @@ const BookPage: React.FC = () => {
               }
             }}
           />
-        ) : null  
+        ) : null
       }));
       setBooks(formattedBooks);
     }
-  }, [data, deleteBook, t]);
+  }, [BookData, deleteBook, t]);
 
   useEffect(() => {
     if (editingBook && Object.keys(editItem).length === 0) {
@@ -86,7 +86,7 @@ const BookPage: React.FC = () => {
         pages: editingBook.pages.toString(),
         publicationYear: editingBook.publicationYear.toString(),
         file: editingBook.filePath?.split('\\').pop() || "",
-        image: editingBook.image?.split('\\').pop() || ""
+        image: editingBook.imagePath?.split('\\').pop() || ""
       });
     }
   }, [editingBook, editItem]);
@@ -126,39 +126,35 @@ const BookPage: React.FC = () => {
     }
   };
 
-  const handleUpdateBook = async (
-    newBook: Partial<Book>,
-    file?: File,
-    image?: File
-  ): Promise<void> => {
-    if (!newBook.title || !newBook.author || newBook.publicationYear === undefined) return;
+  const handleUpdateBook = async (newBook: Partial<Book>, file?: File, image?: File): Promise<void> => {
+    if (!newBook.title || !newBook.author || newBook.publicationYear === undefined) return
 
-    const bookId = editingBook?.id;
-    if (!bookId) return;
-
-    const formData = new FormData();
-    formData.append("id", String(bookId));
-    formData.append("categoryId", newBook.categoryId ? String(newBook.categoryId) : "");
-    formData.append("title", newBook.title);
-    formData.append("author", newBook.author);
-    formData.append("publicationYear", String(newBook.publicationYear));
-    formData.append("bookCode", newBook.bookCode || "N/A");
-    formData.append("language", newBook.language || "Unknown");
-    formData.append("description", newBook.description || "No description");
-    formData.append("pages", newBook.pages ? String(newBook.pages) : "0");
-    formData.append("publisher", newBook.publisher || "");
-    formData.append("file", file || new Blob([], { type: "text/plain" }));
-    formData.append("image", image || new Blob([], { type: "text/plain" }));
+    const bookId = editingBook?.id
+    if (!bookId) return
+    const updateData = {
+      categoryId: Number.parseInt(String(newBook.categoryId), 10) || 0,
+      title: newBook.title,
+      author: newBook.author,
+      publicationYear: Number.parseInt(String(newBook.publicationYear), 10) || 0,
+      bookCode: newBook.bookCode || "N/A",
+      language: newBook.language || "Unknown",
+      description: newBook.description || "No description",
+      pages: Number.parseInt(String(newBook.pages), 10) || 0,
+      publisher: newBook.publisher || "",
+      file: file || new Blob([], { type: "text/plain" }),
+      image: image || new Blob([], { type: "text/plain" }),
+    }
 
     try {
-      await updateBook({ id: bookId, body: formData }).unwrap();
+      await updateBook({ id: bookId, ...updateData }).unwrap()
     } catch (err) {
-      console.error(err);
+      console.error(err)
     } finally {
-      setEditingBook(null);
-      setEditItem({});
+      setEditingBook(null)
+      setEditItem({})
     }
-  };
+  }
+
 
   if (isLoading) return <p>{t("loading")}</p>;
   if (error) return <p>{t("error_loading_books")}</p>;
@@ -176,7 +172,7 @@ const BookPage: React.FC = () => {
           { key: "number", label: '№', downFilterIcon: down_filter },
           { key: "title", label: t("title"), downFilterIcon: down_filter },
           { key: "author", label: t("author"), downFilterIcon: down_filter },
-          { key: "publicationYear", label: t("year"), downFilterIcon: down_filter },
+          { key: "bookCode", label: t('bookCode'), downFilterIcon: down_filter },
           { key: "status", label: t('status'), downFilterIcon: down_filter },
           { key: "edit", label: t('edit_item') },
           { key: "deleteitemicon", label: t('delete_item') },

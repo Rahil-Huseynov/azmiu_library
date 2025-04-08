@@ -1,36 +1,97 @@
-import { useState } from "react";
 import AdminPageWrapper from "../../../../components/admin/AdminPageWrapper";
 import { useTranslation } from "react-i18next";
-import down_filter from '../../../../assets/icons/down.png'
-interface Category {
-    id: number;
-    name: string;
-    description: string;
+import down_filter from '../../../../assets/icons/down.png';
+import { useGetCategoriesQuery, useAddCategoryMutation, useDeleteCategoryMutation } from "../../../../services/CategoryApi";
+import edit from '../../../../assets/icons/edit.png';
+import deleteitemicon from '../../../../assets/icons/delete.png';
+import { useState, useEffect } from "react";
+import Modal from "../../../../components/admin/Modal";
+
+export interface Category {
+    id?: string;
+    bookCategory: string;
+    status: string;
 }
 
 const CategoriesPage = () => {
-    const [categories, setCategories] = useState<Category[]>([
-        { id: 1, name: "Science Fiction", description: "Books that explore futuristic and scientific themes." },
-        { id: 2, name: "Mystery", description: "Books with suspenseful and intriguing storylines." },
-        { id: 3, name: "History", description: "Books that delve into historical events and narratives." },
-    ]);
+    const { data: categories = [] } = useGetCategoriesQuery();
+    const { t } = useTranslation();
+    const [formattedCategories, setFormattedCategories] = useState<any[]>([]);
+    const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+    const [editCategoryData, setEditCategoryData] = useState<Partial<Category>>({});
 
-    const handleAddCategory = (newCategory: Partial<Category>) => {
-        if (!newCategory.name || !newCategory.description) {
-            console.error("Missing fields in newCategory");
+    const [addCategory] = useAddCategoryMutation();
+    const [deleteCategory] = useDeleteCategoryMutation();
+
+    const handleAddCategory = async (newCategory: Partial<Category>) => {
+        if (!newCategory.bookCategory) {
+            console.error("Missing bookCategory in newCategory");
             return;
         }
 
-        const newCategoryWithId: Category = {
-            id: categories.length + 1,
-            name: newCategory.name,
-            description: newCategory.description,
-        };
-
-        setCategories((prevCategories) => [...prevCategories, newCategoryWithId]);
+        try {
+            const response = await addCategory(newCategory).unwrap();
+            console.log("Category added successfully:", response);
+        } catch (error) {
+            console.error("Error adding category:", error);
+        }
     };
-    const { t } = useTranslation();
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setEditCategoryData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleEditClick = (category: Category) => {
+        setEditingCategory(category);
+        setEditCategoryData({
+            bookCategory: category.bookCategory,
+            status: category.status
+        });
+    };
+
+    const handleSaveCategory = () => {
+        if (editingCategory) {
+            console.log("Saving updated category:", editCategoryData);
+            setEditingCategory(null);
+        }
+    };
+
+    const handleDeleteCategory = async (id: string) => {
+        if (window.confirm(t("confirm_delete") || "Silmək istədiyinizə əminsiniz?")) {
+            try {
+                await deleteCategory(id).unwrap();
+            } catch (error) {
+                console.error("Error deleting category:", error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (categories) {
+            const formatted = categories.map((category, index) => ({
+                ...category,
+                number: index + 1,
+                edit: (
+                    <img
+                        src={edit}
+                        alt="edit"
+                        style={{ width: "20px", cursor: "pointer" }}
+                        onClick={() => handleEditClick(category)}
+                    />
+                ),
+                delete: (
+                    <img
+                        src={deleteitemicon}
+                        alt="delete"
+                        style={{ width: "20px", cursor: "pointer" }}
+                        onClick={() => handleDeleteCategory(category.id!)}
+                    />
+                )
+            }));
+            setFormattedCategories(formatted);
+        }
+    }, [categories, t]);
 
     return (
         <>
@@ -42,21 +103,48 @@ const CategoriesPage = () => {
                 add_item={t('add_categories')}
                 add_new_item={t('add_new_categories')}
                 columns={[
-                    { key: "name", label: t("categoryname"), downFilterIcon: down_filter },
-                    { key: "description", label: t("categorydescription"), downFilterIcon: down_filter },
+                    { key: "number", label: t("№") },
+                    { key: "bookCategory", label: t("categoryname"), downFilterIcon: down_filter },
+                    { key: "status", label: t("categorystatus"), downFilterIcon: down_filter },
+                    { key: "edit", label: t("edit_item") },
+                    { key: "delete", label: t("delete_item") },
                 ]}
                 formFields={[
-                    { name: "name", label: t("categoryname"), type: "text" },
-                    { name: "description", label: t("categorydescription"), type: "text" },
+                    { name: "bookCategory", label: t("categoryname"), type: "text" },
                 ]}
-                items={categories}
+                items={formattedCategories}
                 onAddItem={handleAddCategory}
                 sortOptions={[
-                    { value: "name_asc", label: t("az") },
-                    { value: "name_desc", label: t("za") },
+                    { value: "bookCategory_asc", label: t("az") },
+                    { value: "bookCategory_desc", label: t("za") },
                 ]}
             />
+
+            {editingCategory && (
+                <Modal
+                    isOpen={true}
+                    closeModal={() => setEditingCategory(null)}
+                    handleSubmit={handleSaveCategory}
+                    formFields={[
+                        {
+                            name: "bookCategory",
+                            label: t("categoryname"),
+                            type: "text"
+                        },
+                        {
+                            name: "status",
+                            label: t("categorystatus"),
+                            type: "text"
+                        },
+                    ]}
+                    newItem={editCategoryData}
+                    add_item={t("save_changes")}
+                    add_new_item={t("save_changes")}
+                    handleInputChange={handleInputChange}
+                />
+            )}
         </>
     );
 };
+
 export default CategoriesPage;

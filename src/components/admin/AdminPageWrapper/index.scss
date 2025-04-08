@@ -40,7 +40,8 @@
       &__book__list {
         font-size: $font-xl;
         font-weight: $font-extrabold;
-        &__subtitle{
+
+        &__subtitle {
           font-size: $font-xxxl;
           font-weight: $font-extrabold;
         }
@@ -68,125 +69,127 @@
           background-position: 1% center;
           height: 48px;
           padding-left: $spacing-xxl;
-          @media(max-width:480px){
-          padding-left: $spacing-lg;
-          background-position: 3% center;
+
+          @media(max-width:480px) {
+            padding-left: $spacing-lg;
+            background-position: 3% center;
 
           }
         }
-  
-          &::placeholder {
-            color: rgba(87, 87, 86, 0.8);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-          }
 
-          &:focus {
-            outline: 0;
-          }
+        &::placeholder {
+          color: rgba(87, 87, 86, 0.8);
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
         }
-       
+
+        &:focus {
+          outline: 0;
+        }
       }
-      &__sort_container {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-  
-        &__item {
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-          padding: $spacing-xs;
-          min-width: 20%;
-        }
-  
-        &__sort__items {
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          gap: $spacing-md;
-          min-width: 80%;
-  
-          #sort-select {
-            padding: $spacing-xs;
-          }
-        }
-      }  
+
     }
 
-
-  }
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-
-    &.open {
+    &__sort_container {
       display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &__item {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: $spacing-xs;
+      }
+
+      &__sort__items {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: $spacing-md;
+
+        #sort-select {
+          padding: $spacing-xs;
+        }
+      }
+    }
+  }
+
+
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+
+  &.open {
+    display: flex;
+  }
+
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 15px;
+
+      .close-btn {
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        background: none;
+        border: none;
+        color: #333;
+      }
     }
 
-    .modal-content {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      width: 50%;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    .modal-body {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
 
-      .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-bottom: 15px;
+      .input-field {
+        margin-bottom: 10px;
 
-        .close-btn {
-          cursor: pointer;
-          font-size: 20px;
-          font-weight: bold;
-          background: none;
-          border: none;
-          color: #333;
+        input {
+          width: 100%;
+          padding: 10px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
         }
       }
 
-      .modal-body {
+      .modal-footer {
         display: flex;
-        flex-direction: column;
-        gap: 15px;
+        justify-content: flex-end;
 
-        .input-field {
-          margin-bottom: 10px;
-          input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-          }
-        }
+        .save-btn {
+          padding: 10px 20px;
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
 
-        .modal-footer {
-          display: flex;
-          justify-content: flex-end;
-
-          .save-btn {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-
-            &:hover {
-              background-color: #45a049;
-            }
+          &:hover {
+            background-color: #45a049;
           }
         }
       }
     }
   }
+}
