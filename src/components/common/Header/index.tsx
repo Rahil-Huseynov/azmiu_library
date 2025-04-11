@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import "./index.scss";
-import azmiu from "../../../../assets/icons/azmiu.webp";
-import dropdown from "../../../../assets/icons/down-arrow.png";
-import dropdown_open_navbar from "../../../../assets/icons/icons8-expand-arrow-50.png";
-import dropdown_item from "../../../../assets/icons/arrow-down-sign-to-navigate.png";
-import logout_icon from "../../../../assets/icons/icons8-logout-50.png";
-import logout_icon_white from "../../../../assets/icons/icons8-logout-50-white.png";
-import { useSidebar } from "../../../../hooks/usedSidebar.ts";
-import SidebarWrapper from "../../../../components/admin/Sidebar/SidebarWrapper";
-import { ROUTES } from "../../../../utils/constant.ts";
+import azmiu from "../../../assets/icons/azmiu.webp";
+import dropdown from "../../../assets/icons/down-arrow.png";
+import dropdown_open_navbar from "../../../assets/icons/icons8-expand-arrow-50.png";
+import dropdown_item from "../../../assets/icons/arrow-down-sign-to-navigate.png";
+import logout_icon from "../../../assets/icons/icons8-logout-50.png";
+import logout_icon_white from "../../../assets/icons/icons8-logout-50-white.png";
+import { useSidebar } from "../../../hooks/usedSidebar.ts";
+import SidebarWrapper from "../../admin/Sidebar/SidebarWrapper/index.tsx";
+import { ROUTES } from "../../../utils/constant.ts";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../../hooks/useAuth.ts";
+import { useAuth } from "../../../hooks/useAuth.ts";
 import { useTranslation } from "react-i18next";
-import Language from "../../../../components/common/Language/index.tsx";
+import Language from "../Language/index.tsx";
 
 const Header: React.FC = () => {
     const { isSidebarOpen, toggleSidebar } = useSidebar();
