@@ -14,7 +14,7 @@ import { useAuth } from "../../../hooks/useAuth.ts";
 import { useTranslation } from "react-i18next";
 import Language from "../Language/index.tsx";
 
-const Header: React.FC = () => {
+const HeaderAccount: React.FC = () => {
     const { isSidebarOpen, toggleSidebar } = useSidebar();
     const { logout } = useAuth();
     const navigate = useNavigate();
@@ -84,4 +84,4 @@ const Header: React.FC = () => {
     );
 };
 
-export default Header;
+export default HeaderAccount;

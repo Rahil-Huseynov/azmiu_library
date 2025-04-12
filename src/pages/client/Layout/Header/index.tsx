@@ -1,9 +1,10 @@
+import HeaderAccount from "../../../../components/common/Header";
 import "./index.scss";
 
 const Header = () => {
     return (
         <>
-            <h1>Client Header</h1>
+            <HeaderAccount />
         </>
     );
 };

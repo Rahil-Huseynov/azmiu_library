@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
-import Header from "../../components/common/Header/index.tsx";
 import Footer from "./Layout/Footer";
 import "./index.scss";
 import {useSidebar} from "../../hooks/usedSidebar.ts";
+import HeaderAccount from "../../components/common/Header/index.tsx";
 
 const AdminLayout = () => {
     const { isSidebarOpen } = useSidebar();
@@ -10,7 +10,7 @@ const AdminLayout = () => {
     return (
         <>
             <div className={`container_admin_main_page ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
-                <Header />
+                <HeaderAccount />
                 <Outlet />
             </div>
             <Footer />
