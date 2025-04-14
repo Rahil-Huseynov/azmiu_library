@@ -1,6 +1,6 @@
 @use "../../../assets/styles/scss/mixin.scss" as *;
 @use "../../../assets/styles/scss/variables.scss" as *;
-.Admin_Header_Container {
+.Common_Header_Container {
     display: flex;
     flex-direction: column;
     height: calc(100vh - 30px);
@@ -98,7 +98,7 @@
         transform: translateX(-350px);
     }
 
-    .Admin_Header_Container {
+    .Common_Header_Container {
         &_Logout_Container {
             display: flex;
             justify-content: space-between;
@@ -133,7 +133,7 @@
 
             &:hover &_ICON,
             &:hover &_Logout_ICON {
-                filter: brightness(0) saturate(100%) invert(100%); // Makes icon white on hover
+                filter: brightness(0) saturate(100%) invert(100%); 
             }
         }
     }

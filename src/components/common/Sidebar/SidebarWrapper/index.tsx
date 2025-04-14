@@ -35,7 +35,7 @@ const SidebarWrapper: React.FC<SidebarWrapperProps> = ({ sidebarItems }) => {
   };
 
   return (
-    <div className="Admin_Header_Container_SidebarNavItem">
+    <div className="Common_Header_Container_SidebarNavItem">
       {isAuthenticated && renderSidebarItems()}
     </div>
   );

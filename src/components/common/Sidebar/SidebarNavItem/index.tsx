@@ -23,18 +23,18 @@ const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
     const isActive = location.pathname.startsWith(path);
 
     return (
-        <Link to={path} className="Admin_Header_Link">
-            <div className={`Admin_Header_Container_SidebarNavItem_Items ${isActive ? "active" : ""}`}>
-                <div className="Admin_Header_Container_SidebarNavItem_Items_Book">
+        <Link to={path} className="Common_Header_Link">
+            <div className={`Common_Header_Container_SidebarNavItem_Items ${isActive ? "active" : ""}`}>
+                <div className="Common_Header_Container_SidebarNavItem_Items_Book">
                     <img
-                        className="Admin_Header_Container_SidebarNavItem_Items_Book_ICON"
+                        className="Common_Header_Container_SidebarNavItem_Items_Book_ICON"
                         src={isActive ? activeIcon : icon}
                         alt={`${label.toLowerCase()}_icon`}
                     />
                     <p>{label}</p>
                 </div>
                 <img
-                    className="Admin_Header_Container_SidebarNavItem_Items_ICON"
+                    className="Common_Header_Container_SidebarNavItem_Items_ICON"
                     src={isActive ? activeDropdownIcon : dropdownIcon}
                     alt="dropdown_item"
                 />
