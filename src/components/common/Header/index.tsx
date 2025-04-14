@@ -13,8 +13,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth.ts";
 import { useTranslation } from "react-i18next";
 import Language from "../Language/index.tsx";
+import { SidebarItem } from "../../admin/Sidebar/SidebarWrapper/index.tsx";
 
-const HeaderAccount: React.FC = () => {
+interface HeaderAccountProps {
+    sidebarItems: SidebarItem[];
+}
+
+
+const HeaderAccount: React.FC<HeaderAccountProps> = ({ sidebarItems }) => {
     const { isSidebarOpen, toggleSidebar } = useSidebar();
     const { logout } = useAuth();
     const navigate = useNavigate();
@@ -60,7 +66,7 @@ const HeaderAccount: React.FC = () => {
                 <Language />
 
                 {/* Navigation Items */}
-                <SidebarWrapper />
+                <SidebarWrapper sidebarItems={sidebarItems} />
 
                 {/* Logout */}
                 <div
@@ -77,10 +83,11 @@ const HeaderAccount: React.FC = () => {
                         />
                         <p>{t('logout')}</p>
                     </div>
-                    <img className="Admin_Header_Container_Logout_Container_ICON" src={isHovered ? dropdown_open_navbar : dropdown_item } alt="dropdown_item" />
+                    <img className="Admin_Header_Container_Logout_Container_ICON" src={isHovered ? dropdown_open_navbar : dropdown_item} alt="dropdown_item" />
                 </div>
             </div>
-        </>
+        </> 
+        
     );
 };
 
