@@ -134,10 +134,10 @@ const BookPage: React.FC = () => {
 
   const handleUpdateBook = async (newBook: Partial<Book>, file?: File, image?: File): Promise<void> => {
     if (!newBook.title || !newBook.author || newBook.publicationYear === undefined) return
-  
+
     const bookId = editingBook?.id
     if (!bookId) return
-  
+
     const formData = new FormData()
     formData.append("id", String(bookId))
     formData.append("categoryId", String(newBook.categoryId || 0))
@@ -149,9 +149,8 @@ const BookPage: React.FC = () => {
     formData.append("description", newBook.description || "No description")
     formData.append("pages", String(newBook.pages || 0))
     formData.append("publisher", newBook.publisher || "")
-    formData.append("file", file || new Blob([], { type: "text/plain" }))
-    formData.append("image", image || new Blob([], { type: "text/plain" }))
-
+    formData.append("file", file || new File([editingBook.filePath], editingBook.filePath || ""));
+    formData.append("image", image || new File([editingBook.imagePath], editingBook.imagePath || ""));
     try {
       await updateBook({ id: bookId, formData }).unwrap()
     } catch (err) {
@@ -161,7 +160,7 @@ const BookPage: React.FC = () => {
       setEditItem({})
     }
   }
-  
+
   if (isLoading) return <p>{t("loading")}</p>
   if (error) return <p>{t("error_loading_books")}</p>
 
