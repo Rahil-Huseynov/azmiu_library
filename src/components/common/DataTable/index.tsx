@@ -7,14 +7,22 @@ export interface Column {
     downFilterIcon?: string;
 }
 
+interface PaginationProps {
+  count: number;
+  page: number;
+  onChange: (page: number) => void;
+}
+
 interface DataTableProps<T> {
     columns: Column[];
     data: T[];
+    pagination?: PaginationProps;
 }
 
 const DataTable = <T extends Record<string, any>>({
     columns,
     data,
+    pagination,
 }: DataTableProps<T>) => {
     const handleColumnClick = (e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
         const thElement = e.currentTarget.querySelector('.table_thead_tr_th_down_filter');
@@ -37,7 +45,7 @@ const DataTable = <T extends Record<string, any>>({
                                         src={col.downFilterIcon} 
                                         className="table_thead_tr_th_down_filter" 
                                         alt="down_filter" 
-                                />
+                                    />
                                 )}
                             </th>
                         ))}
@@ -53,9 +61,15 @@ const DataTable = <T extends Record<string, any>>({
                     ))}
                 </tbody>
             </table>
-            <div className="table_PaginationContainer">
-                <PaginationButtons />
-            </div>
+            {pagination && (
+              <div className="table_PaginationContainer">
+                <PaginationButtons 
+                  count={pagination.count} 
+                  page={pagination.page} 
+                  onChange={pagination.onChange} 
+                />
+              </div>
+            )}
         </>
     );
 };

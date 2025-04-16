@@ -6,7 +6,10 @@ export const booksApi = createApi({
   tagTypes: ['Books'],
   endpoints: (builder) => ({
     getBooks: builder.query({
-      query: () => '/books/sorted',
+      query: ({ page, count }: { page: number; count: number }) => ({
+        url: '/books/sorted',
+        params: { page, count },
+      }),
       providesTags: ['Books']
     }),
     addBook: builder.mutation({
@@ -18,7 +21,7 @@ export const booksApi = createApi({
       invalidatesTags: ['Books']
     }),
     updateBook: builder.mutation({
-      query: ({formData }) => ({
+      query: ({ formData }) => ({
         url: `/books`,
         method: 'PUT',
         body: formData,

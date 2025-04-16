@@ -1,12 +1,27 @@
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import { Pagination, Stack } from "@mui/material";
 
-const PaginationButtons = ()=> {
-  return (
-    <Stack spacing={2}>
-      <Pagination count={10} showFirstButton showLastButton />
-    </Stack>
-  );
+interface PaginationButtonsProps {
+  count: number;
+  page: number;
+  onChange: (page: number) => void;
 }
 
-export default PaginationButtons
+const PaginationButtons = ({ count, page, onChange }: PaginationButtonsProps) => {
+  const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
+    onChange(value);
+  };
+
+  return (
+    <Stack spacing={2}>
+      <Pagination 
+        count={count} 
+        page={page} 
+        onChange={handleChange}
+        showFirstButton 
+        showLastButton 
+      />
+    </Stack>
+  );
+};
+
+export default PaginationButtons;

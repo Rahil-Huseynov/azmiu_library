@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import AdminPageWrapper from "../../../../components/admin/AdminPageWrapper"
 import { useTranslation } from "react-i18next"
@@ -36,7 +35,8 @@ export interface Book {
 
 const BookPage: React.FC = () => {
   const { t } = useTranslation()
-  const { data: BookData, error, isLoading } = useGetBooksQuery({})
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const { data: BookData, error, isLoading, refetch } = useGetBooksQuery({ page: currentPage-1, count: 10 })
   const [addBook] = useAddBookMutation()
   const [updateBook] = useUpdateBookMutation()
   const [deleteBook] = useDeleteBookMutation()
@@ -149,8 +149,8 @@ const BookPage: React.FC = () => {
     formData.append("description", newBook.description || "No description")
     formData.append("pages", String(newBook.pages || 0))
     formData.append("publisher", newBook.publisher || "")
-    formData.append("file", file || new File([editingBook.filePath], editingBook.filePath || ""));
-    formData.append("image", image || new File([editingBook.imagePath], editingBook.imagePath || ""));
+    formData.append("file", file || new File([editingBook.filePath], editingBook.filePath.split("\\").pop() || "default.txt"))
+    formData.append("image", image || new File([editingBook.imagePath], editingBook.imagePath.split("\\").pop() || "default.jpg"))
     try {
       await updateBook({ id: bookId, formData }).unwrap()
     } catch (err) {
@@ -159,6 +159,11 @@ const BookPage: React.FC = () => {
       setEditingBook(null)
       setEditItem({})
     }
+  }
+
+  const handlePageChange = (page: number): void => {
+    setCurrentPage(page)
+    refetch()
   }
 
   if (isLoading) return <p>{t("loading")}</p>
@@ -202,6 +207,11 @@ const BookPage: React.FC = () => {
           { value: "old", label: t("sortitem_oldest") },
           { value: "title", label: t("sortitem_by_title") },
         ]}
+        pagination={{
+          count: BookData?.totalPages || 1,
+          page: currentPage,
+          onChange: handlePageChange,
+        }}
       />
 
       {editingBook && (
@@ -237,4 +247,4 @@ const BookPage: React.FC = () => {
   )
 }
 
-export default BookPage
+export default BookPage;

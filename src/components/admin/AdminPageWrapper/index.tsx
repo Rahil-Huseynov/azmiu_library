@@ -22,7 +22,12 @@ interface AdminPageWrapperProps {
     onAddItem: (newItem: Record<string, any>, file?: File, image?: File) => void;
     sortOptions?: { value: string; label: string }[];
     editingItem?: Book | null;
-    onAddClick?: () => void; // Added this line to fix the error
+    onAddClick?: () => void;
+    pagination?: { 
+      count: number; 
+      page: number; 
+      onChange: (page: number) => void;
+    };
 }
 
 const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
@@ -37,7 +42,8 @@ const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
     onAddItem,
     sortOptions = [],
     editingItem,
-    onAddClick, // Added this line
+    onAddClick, 
+    pagination,
 }) => {
     const { isSidebarOpen } = useSidebar();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -132,7 +138,11 @@ const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
                         </div>
                     </div>
 
-                    <DataTable columns={columns} data={filteredItems} />
+                    <DataTable 
+                      columns={columns} 
+                      data={filteredItems} 
+                      pagination={pagination} 
+                    />
                 </div>
             </div>
 
