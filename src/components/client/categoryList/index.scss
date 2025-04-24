@@ -1,0 +1,44 @@
+.category-list {
+  display: flex;
+  gap: 5px;
+
+  .active {
+    color: white;
+    background-color: #2a67eb;
+    &:hover {
+      transition: 0.2s;
+      background-color: #4478e9;
+    }
+  }
+
+  span {
+    border: 1px solid #e5ecf4;
+    text-transform: capitalize;
+    font-size: 12px;
+    font-weight: bold;
+    width: fit-content;
+    border-radius: 15px;
+    padding: 5px 10px;
+    color: #2a67eb;
+  }
+}
+.categories {
+  span {
+    background-color: #f9fafb;
+    cursor: pointer !important;
+    &:hover {
+      transition: 0.2s;
+      background-color: rgb(239, 246, 255, 0.7);
+    }
+  }
+}
+.mostReadBook {
+  span {
+    background-color: #eff6ff;
+    cursor: text;
+    &:hover {
+      transition: 0.2s;
+      background-color: rgb(219, 234, 259, 1);
+    }
+  }
+}

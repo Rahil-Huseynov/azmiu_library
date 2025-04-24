@@ -1,0 +1,91 @@
+.book-carts {
+
+    width: 100%;
+    gap: 10px;
+    display: flex;
+
+    .book-cart {
+        border-radius: 10px;
+        width: 185px;
+        height: 310px;
+        background-color: white;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+        .degree {
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          padding: 5px 10px;
+          border-radius: 15px;
+          background-color: #22c55e;
+          font-size: 12px;
+          text-transform: capitalize;
+          color: white;
+          font-weight: bold;
+  
+          &:hover {
+              transition: 0.3s;
+              background-color: #2a67eb;
+          }
+      }
+      #degree1,
+      #degree2,
+      #degree3 {
+          &:hover {
+              transition: 0.3s;
+              background-color: #2a67eb;
+          }
+      }
+      #degree1 {
+          background-color: #ef4444;
+      }
+      #degree2 {
+          background-color: #f97316;
+      }
+      #degree3 {
+          background-color: #eab308;
+      }
+        &:hover {
+            transition: 0.1s;
+            box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+        }
+        img {
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+        }
+        .info {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            .book-name,
+            .author-name {
+                text-transform: capitalize;
+
+                max-width: 150px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .book-name {
+                font-weight: 300;
+                font-size: 15px;
+                color: black;
+            }
+            .author-name {
+                color: #747b88;
+                font-size: 12px;
+            }
+        }
+    }
+    .most-read-book {
+      position: relative;
+  }
+}
+
+  

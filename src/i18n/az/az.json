@@ -48,5 +48,22 @@
   "publicationYear": "Nəşr ili",
   "confirm_delete": "Silmək istədiyinizə əminsiniz?",
   "edit_item": "Redaktə et",
-  "delete_item": "Sil"
+  "delete_item": "Sil",
+  "favorites": "Seçilmişlər",
+  "myLibrary": "Kitabxanam",
+  "discover": "Kəşf et",
+  "azmiuLibrary": "AzMİU Kitabxanası",
+  "recommended": "Tövsiyə olunan",
+  "mostRead": "Ən çox oxunan",
+  "seeAll": "Hamısına bax",
+  "popular": "Populyar",
+  "newest": "Ən Yeni",
+  "oldest": "Ən Köhnə",
+  "mostPopular": "Ən Populyar",
+  "reads": "Oxunma",
+  "readNow": "İndi Oxu",
+  "addToLibrary": "Kitabxanaya Əlavə Et",
+  "reviews": "Rəylər",
+  "searchBook": "Kitab axtar",
+  "all": "Hamısı"
 }

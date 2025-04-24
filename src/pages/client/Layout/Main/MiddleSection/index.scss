@@ -1,0 +1,11 @@
+.middleSection {
+    width: 100%;
+    background-color: #f9fafb;
+    overflow: auto;
+    font-family: sans-serif;
+    .middle-block{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+}

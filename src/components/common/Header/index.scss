@@ -3,7 +3,7 @@
 .Admin_Header_Container {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 30px);
+    height: 100vh;
     width: 330px;
     padding: $spacing-xl;
     background-color: $background-color-admin-header;
@@ -92,9 +92,12 @@
 
     &.scroll-left {
         transform: translateX(0px);
+        transition: 0.3s;
     }
-
+    
     &.scroll-left-1 {
+        width: 0;
+        transition: 0.3s;
         transform: translateX(-350px);
     }
 
