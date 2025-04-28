@@ -149,8 +149,8 @@ const BookPage: React.FC = () => {
     formData.append("description", newBook.description || "No description")
     formData.append("pages", String(newBook.pages || 0))
     formData.append("publisher", newBook.publisher || "")
-    formData.append("file", file || new File([editingBook.filePath], editingBook.filePath.split("\\").pop() || "default.txt"))
-    formData.append("image", image || new File([editingBook.imagePath], editingBook.imagePath.split("\\").pop() || "default.jpg"))
+    formData.append("file", file || new File([editingBook.filePath], editingBook.filePath))
+    formData.append("image", image || new File([editingBook.imagePath], editingBook.imagePath))
     try {
       await updateBook({ id: bookId, formData }).unwrap()
     } catch (err) {

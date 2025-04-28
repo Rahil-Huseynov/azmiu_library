@@ -14,7 +14,7 @@ export const booksApi = createApi({
     }),
     addBook: builder.mutation({
       query: (formData) => ({
-        url: '/bookInventory',
+        url: '/book-inventory',
         method: 'POST',
         body: formData,
       }),
@@ -22,7 +22,7 @@ export const booksApi = createApi({
     }),
     updateBook: builder.mutation({
       query: ({ formData }) => ({
-        url: `/books`,
+        url: `/books/update/single`,
         method: 'PUT',
         body: formData,
       }),
