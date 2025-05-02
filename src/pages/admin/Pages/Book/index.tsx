@@ -36,14 +36,17 @@ export interface Book {
 const BookPage: React.FC = () => {
   const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const { data: BookData, error, isLoading, refetch } = useGetBooksQuery({ page: currentPage-1, count: 10 })
+  const [searchTitle, setSearchTitle] = useState<string>("")
+  const { data: BookData, error, isLoading, refetch,} = useGetBooksQuery({ page: currentPage - 1, count: 10, title: searchTitle})
   const [addBook] = useAddBookMutation()
   const [updateBook] = useUpdateBookMutation()
   const [deleteBook] = useDeleteBookMutation()
   const [books, setBooks] = useState<Book[]>([])
   const [editingBook, setEditingBook] = useState<Book | null>(null)
   const [editItem, setEditItem] = useState<Record<string, string>>({})
-
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchTitle])
   useEffect(() => {
     if (BookData?.list) {
       const formattedBooks = BookData.list.flat().map((book: Book, index: number) => ({
@@ -212,6 +215,8 @@ const BookPage: React.FC = () => {
           page: currentPage,
           onChange: handlePageChange,
         }}
+        searchValue={searchTitle}
+        onSearchChange={setSearchTitle}
       />
 
       {editingBook && (

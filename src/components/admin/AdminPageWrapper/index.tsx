@@ -21,34 +21,37 @@ interface AdminPageWrapperProps {
     items: Record<string, any>[];
     onAddItem: (newItem: Record<string, any>, file?: File, image?: File) => void;
     sortOptions?: { value: string; label: string }[];
+    searchValue: string;
+    onSearchChange: (value: string) => void;
     editingItem?: Book | null;
     onAddClick?: () => void;
-    pagination?: { 
-      count: number; 
-      page: number; 
-      onChange: (page: number) => void;
+    pagination?: {
+        count: number;
+        page: number;
+        onChange: (page: number) => void;
     };
 }
 
 const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
     resourceName,
     searchtag,
-    columns,
     all_item,
     add_item,
+    add_new_item,
+    columns,
     formFields,
     items,
-    add_new_item,
     onAddItem,
     sortOptions = [],
+    searchValue,
+    onSearchChange,
     editingItem,
-    onAddClick, 
+    onAddClick,
     pagination,
 }) => {
     const { isSidebarOpen } = useSidebar();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newItem, setNewItem] = useState<Record<string, string>>({});
-    const [searchQuery, setSearchQuery] = useState("");
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -61,43 +64,21 @@ const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
             setNewItem(prefill);
             setIsModalOpen(true);
         } else {
-            const initialItem = formFields.reduce((acc, field) => {
+            const initial = formFields.reduce((acc, field) => {
                 acc[field.name] = "";
                 return acc;
             }, {} as Record<string, string>);
-            setNewItem(initialItem);
+            setNewItem(initial);
         }
     }, [editingItem, formFields]);
 
-    const handleAddClick = () => {
-        if (onAddClick) {
-            onAddClick();
-        } else {
-            setIsModalOpen(true);
-        }
-    };
-
-    const handleModalClose = () => {
-        setIsModalOpen(false);
-    };
-
+    const handleAddClick = () => onAddClick ? onAddClick() : setIsModalOpen(true);
+    const handleModalClose = () => setIsModalOpen(false);
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setNewItem((prev) => ({ ...prev, [name]: value }));
+        setNewItem(prev => ({ ...prev, [name]: value }));
     };
-
-    const handleSubmit = (newBook: Partial<Book>, file?: File, image?: File) => {
-        onAddItem(newBook, file, image);
-        setIsModalOpen(false);
-        setNewItem(
-            formFields.reduce((acc, field) => ({ ...acc, [field.name]: "" }), {})
-        );
-    };
-
-    const filteredItems = items.filter((item) =>
-        columns.some((col) =>
-            String(item[col.key]).toLowerCase().includes(searchQuery.toLowerCase())
-        ));
+    const displayedItems = items;
 
     return (
         <div className={`table-container ${isSidebarOpen ? "table-container--open" : "table-container--closed"}`}>
@@ -105,7 +86,6 @@ const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
                 <div className="AdminPageWrapperContainer__header">
                     <p className="AdminPageWrapperContainer__header__title">{resourceName}</p>
                 </div>
-
                 <div className="AdminPageWrapperContainer__content">
                     <div className="AdminPageWrapperContainer__content__section">
                         <div className="AdminPageWrapperContainer__content__section__book__list">
@@ -117,19 +97,18 @@ const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
                             <input
                                 type="text"
                                 className="AdminPageWrapperContainer__content__section__subsection__input"
-                                placeholder={`${searchtag}`}
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder={searchtag}
+                                value={searchValue}
+                                onChange={e => onSearchChange(e.target.value)}
                             />
                         </div>
                     </div>
-
                     <div className="AdminPageWrapperContainer__content__sort_container">
                         <div className="AdminPageWrapperContainer__content__sort_container__item">
                             <p>{all_item}</p>
                         </div>
                         <div className="AdminPageWrapperContainer__content__sort_container__sort__items">
-                            {sortOptions.map((option) => (
+                            {sortOptions.map(option => (
                                 <Sort key={option.value} t={t} sortOptions={sortOptions} />
                             ))}
                             <div className="AdminPageWrapperContainer__content__sort_container__sort__items__addbook">
@@ -137,19 +116,21 @@ const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
                             </div>
                         </div>
                     </div>
-
-                    <DataTable 
-                      columns={columns} 
-                      data={filteredItems} 
-                      pagination={pagination} 
+                    <DataTable
+                        columns={columns}
+                        data={displayedItems}
+                        pagination={pagination}
                     />
                 </div>
             </div>
-
             <Modal
                 isOpen={isModalOpen}
                 closeModal={handleModalClose}
-                handleSubmit={handleSubmit}
+                handleSubmit={(book, file, image) => {
+                    onAddItem(book, file, image);
+                    setIsModalOpen(false);
+                    setNewItem(formFields.reduce((acc, f) => ({ ...acc, [f.name]: "" }), {} as Record<string, string>));
+                }}
                 formFields={formFields}
                 newItem={newItem}
                 handleInputChange={handleInputChange}

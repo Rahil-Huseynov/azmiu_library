@@ -6,9 +6,9 @@ export const booksApi = createApi({
   tagTypes: ['Books'],
   endpoints: (builder) => ({
     getBooks: builder.query({
-      query: ({ page, count }: { page: number; count: number }) => ({
+      query: ({ page, count, title, }: { page: number; count: number; title: string }) => ({
         url: '/books/sorted',
-        params: { page, count },
+        params: { page, count, title },
       }),
       providesTags: ['Books']
     }),
