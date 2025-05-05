@@ -1,18 +1,17 @@
 import React from "react";
 import "./index.scss";
 import thumb from "../../../../assets/images/thumb.jpeg";
-import dropdown from "../../../../assets/icons/down-arrow.png";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { useClientSidebar } from "../../../../hooks/useClientSidebar";
-import { useSidebar } from "../../../../hooks/usedSidebar";
 import dropdown_open_navbar from "../../../../assets/icons/icons8-expand-arrow-50.png";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { useTranslation } from "react-i18next";
 
-const ClientRightSide = () => {
+const ClientRightSide: React.FC = () => {
   const { isClientSidebarOpen, toggleClientSidebar } = useClientSidebar();
+  const { t } = useTranslation();
 
   return (
     <div className="Client_Footer">
@@ -59,15 +58,15 @@ const ClientRightSide = () => {
         <div className="featured-book-stats">
           <div className="featured-stat-item">
             <span className="featured-stat-number">323</span>
-            <span className="featured-stat-label">Pages</span>
+            <span className="featured-stat-label">{t("pages")}</span>
           </div>
           <div className="featured-stat-item">
             <span className="featured-stat-number">542</span>
-            <span className="featured-stat-label">Reads</span>
+            <span className="featured-stat-label">{t("reads")}</span>
           </div>
           <div className="featured-stat-item">
             <span className="featured-stat-number">110</span>
-            <span className="featured-stat-label">Shares</span>
+            <span className="featured-stat-label">{t("shares")}</span>
           </div>
         </div>
         <p className="featured-book-description">
@@ -77,7 +76,8 @@ const ClientRightSide = () => {
           provides a roadmap for successful digital initiatives.
         </p>
         <button className="featured-read-now-btn">
-          Read Now
+          {t("readNow")}
+  
           <ChevronRightIcon className="right-arrow-icon" />
         </button>
       </div>
