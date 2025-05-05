@@ -3,7 +3,7 @@
     width: 100%;
     gap: 10px;
     display: flex;
-
+    justify-content: space-between;
     .book-cart {
         border-radius: 10px;
         width: 185px;
@@ -12,6 +12,7 @@
         box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
         display: flex;
         flex-direction: column;
+        
         cursor: pointer;
         .degree {
           position: absolute;

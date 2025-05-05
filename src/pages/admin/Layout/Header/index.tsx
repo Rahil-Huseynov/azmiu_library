@@ -34,7 +34,7 @@ const Header = () => {
 
   return (
     <>
-      <div className={`container_admin_main_page ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
+      <div className={`container_admin_main_page ${isSidebarOpen ? "" : "sidebar-closed"}`}>
         <HeaderAccount sidebarItems={adminSidebarItems} />
       </div>
     </>

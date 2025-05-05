@@ -1,11 +1,18 @@
 .middleSection {
     width: 100%;
     background-color: #f9fafb;
-    overflow: auto;
+    overflow-y: auto;
     font-family: sans-serif;
+    overflow-x: hidden;
     .middle-block{
         display: flex;
         flex-direction: column;
         gap: 20px;
     }
+
+
+    &::-webkit-scrollbar {
+        width: 0;
+      }
+
 }

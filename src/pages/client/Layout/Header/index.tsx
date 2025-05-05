@@ -11,7 +11,7 @@ import { useSidebar } from "../../../../hooks/usedSidebar";
 const ClientSideBar = () => {
   const { isSidebarOpen } = useSidebar();
 
-  const adminSidebarItems = [
+  const clientSidebarItems = [
     {
       path: `${ROUTES.DASHBOARD_CLIENT}${ROUTES.DASHBOARD_BOOKS}`,
       label: t("discover"),
@@ -40,10 +40,12 @@ const ClientSideBar = () => {
 
   return (
     <>
-      <div className={`container_client_main_page ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
-        <HeaderAccount
-        variant="client"
-         sidebarItems={adminSidebarItems} />
+      <div
+        className={`container_client_main_page ${
+          isSidebarOpen ? "sidebar-open" : "sidebar-closed"
+        }`}
+      >
+        <HeaderAccount variant="client" sidebarItems={clientSidebarItems} />
       </div>
     </>
   );

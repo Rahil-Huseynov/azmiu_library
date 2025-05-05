@@ -92,7 +92,7 @@ export const routes = createBrowserRouter([
             </ProtectedRoute>
         ),
         children: [
-            { index: true, element: <h1>Client Dashboard</h1> },
+            { index: true, element: <h1></h1> },
             // ... other client routes
         ]
     },
