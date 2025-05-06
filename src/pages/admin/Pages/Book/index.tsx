@@ -37,7 +37,7 @@ const BookPage: React.FC = () => {
   const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [searchTitle, setSearchTitle] = useState<string>("")
-  const { data: BookData, error, isLoading, refetch,} = useGetBooksQuery({ page: currentPage - 1, count: 10, title: searchTitle})
+  const { data: BookData, error, isLoading, refetch, } = useGetBooksQuery({ page: currentPage - 1, count: 10, title: searchTitle })
   const [addBook] = useAddBookMutation()
   const [updateBook] = useUpdateBookMutation()
   const [deleteBook] = useDeleteBookMutation()
@@ -206,9 +206,21 @@ const BookPage: React.FC = () => {
         items={books}
         onAddItem={handleAddBook}
         sortOptions={[
-          { value: "new", label: t("sortitem_newest") },
-          { value: "old", label: t("sortitem_oldest") },
-          { value: "title", label: t("sortitem_by_title") },
+          [
+            { value: "newest", label: t("sortitem_newest") },
+            { value: "oldest", label: t("sortitem_oldest") },
+            { value: "title", label: t("sortitem_by_title") },
+          ],
+          [
+            { value: "newest", label: t("sortitem_newest") },
+            { value: "oldest", label: t("sortitem_oldest") },
+            { value: "title", label: t("sortitem_by_title") },
+          ],
+          [
+            { value: "newest", label: t("sortitem_newest") },
+            { value: "oldest", label: t("sortitem_oldest") },
+            { value: "title", label: t("sortitem_by_title") },
+          ],
         ]}
         pagination={{
           count: BookData?.totalPages || 1,

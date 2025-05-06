@@ -20,7 +20,7 @@ interface AdminPageWrapperProps {
     formFields: { name: string; label: string; type: string }[];
     items: Record<string, any>[];
     onAddItem: (newItem: Record<string, any>, file?: File, image?: File) => void;
-    sortOptions?: { value: string; label: string }[];
+    sortOptions?: { value: string; label: string }[][]
     searchValue: string;
     onSearchChange: (value: string) => void;
     editingItem?: Book | null;
@@ -108,8 +108,8 @@ const AdminPageWrapper: React.FC<AdminPageWrapperProps> = ({
                             <p>{all_item}</p>
                         </div>
                         <div className="AdminPageWrapperContainer__content__sort_container__sort__items">
-                            {sortOptions.map(option => (
-                                <Sort key={option.value} t={t} sortOptions={sortOptions} />
+                            {sortOptions.map((group, idx) => (
+                                <Sort key={idx} t={t} sortOptions={group} />
                             ))}
                             <div className="AdminPageWrapperContainer__content__sort_container__sort__items__addbook">
                                 <Button text_button={add_item} onClick={handleAddClick} />
