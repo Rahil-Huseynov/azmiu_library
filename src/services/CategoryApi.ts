@@ -1,11 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Category } from "../pages/admin/Pages/Categories";
+import { PaginatedResponse } from "../types/types";
+
 export const categoryApi = createApi({
   reducerPath: "categoryApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:7777/v1/" }),
   tagTypes: ["Category"],
   endpoints: (builder) => ({
-    getCategories: builder.query<Category[], void>({
+    getCategories: builder.query<PaginatedResponse<Category>, void>({
       query: () => "categories/all",
       providesTags: ["Category"],
     }),

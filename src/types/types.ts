@@ -12,3 +12,12 @@ export interface SidebarContextType {
     toggleSidebar: () => void; // Add toggle function
 }
 
+export interface PaginatedResponse<T> {
+    list: T[];
+    currentPageNumber: number;
+    totalPages: number;
+    numberOfElements: number;
+    totalElements: number;
+    hasNextPage: boolean;
+  }
+  

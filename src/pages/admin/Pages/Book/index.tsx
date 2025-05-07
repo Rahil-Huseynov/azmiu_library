@@ -1,5 +1,4 @@
 "use client"
-
 import type React from "react"
 import { useState, useEffect } from "react"
 import AdminPageWrapper from "../../../../components/admin/AdminPageWrapper"
@@ -14,6 +13,9 @@ import {
   useDeleteBookMutation,
 } from "../../../../services/BookApi"
 import Modal from "../../../../components/admin/Modal"
+import { useGetCategoriesQuery } from "../../../../services/CategoryApi"
+import { Category } from "../Categories/index"
+import { SelectChangeEvent } from "@mui/material"
 
 export interface Book {
   categoryId: number
@@ -32,12 +34,12 @@ export interface Book {
   imagePath: string
   createdAt: string
 }
-
 const BookPage: React.FC = () => {
   const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [searchTitle, setSearchTitle] = useState<string>("")
   const { data: BookData, error, isLoading, refetch, } = useGetBooksQuery({ page: currentPage - 1, count: 10, title: searchTitle })
+  const { data: CategoryData } = useGetCategoriesQuery()
   const [addBook] = useAddBookMutation()
   const [updateBook] = useUpdateBookMutation()
   const [deleteBook] = useDeleteBookMutation()
@@ -104,10 +106,13 @@ const BookPage: React.FC = () => {
     }
   }, [editingBook, editItem])
 
-  const handleEditInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target
+  const handleEditInputChange = (
+    e: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent
+  ): void => {
+    const { name, value } = e.target as HTMLInputElement | { name: string; value: string }
     setEditItem((prev) => ({ ...prev, [name]: value }))
   }
+
 
   const handleAddBook = async (newBook: Partial<Book>, file?: File, image?: File): Promise<void> => {
     if (!newBook.title || !newBook.author || newBook.publicationYear === undefined) return
@@ -191,7 +196,17 @@ const BookPage: React.FC = () => {
           { key: "deleteitemicon", label: t("delete_item") },
         ]}
         formFields={[
-          { name: "categoryId", label: t("categoryId"), type: "text" },
+          {
+            name: "categoryId",
+            label: t("categoryId"),
+            type: "select",
+            selectOptions:
+              CategoryData?.list.map((cat: Category) => ({
+                value: String(cat.id),
+                label: cat.bookCategory,
+              })) || [],
+          },
+          
           { name: "title", label: t("title"), type: "text" },
           { name: "author", label: t("author"), type: "text" },
           { name: "bookCode", label: t("bookCode"), type: "text" },
@@ -242,7 +257,16 @@ const BookPage: React.FC = () => {
             void handleUpdateBook({ ...editingBook, ...editItem }, file, image)
           }}
           formFields={[
-            { name: "categoryId", label: t("categoryId"), type: "text" },
+            {
+              name: "categoryId",
+              label: t("categoryId"),
+              type: "select",
+              selectOptions:
+                CategoryData?.list.map((cat: Category) => ({
+                  value: String(cat.id),
+                  label: cat.bookCategory,
+                })) || [],
+            },
             { name: "title", label: t("title"), type: "text" },
             { name: "author", label: t("author"), type: "text" },
             { name: "bookCode", label: t("bookCode"), type: "text" },
