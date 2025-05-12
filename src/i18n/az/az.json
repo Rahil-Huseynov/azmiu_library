@@ -48,5 +48,9 @@
   "publicationYear": "Nəşr ili",
   "confirm_delete": "Silmək istədiyinizə əminsiniz?",
   "edit_item": "Redaktə et",
-  "delete_item": "Sil"
+  "delete_item": "Sil",
+  "categorystatus": "Kateqoriya statusu",
+  "categoryId":"Category",
+  "edit_book": "Kitabı redaktə et",
+  "edit_category": "Kateqoriyanı redaktə et"
 }

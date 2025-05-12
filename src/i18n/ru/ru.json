@@ -49,5 +49,9 @@
   "publicationYear": "Год издания",
   "confirm_delete": "Вы уверены, что хотите удалить?",
   "edit_item": "Редактировать",
-  "delete_item": "Удалить"
+  "delete_item": "Удалить",
+  "categorystatus": "Статус категории",
+  "categoryId":"Категория",
+  "edit_book": "Редактировать книгу",
+  "edit_category": "Редактировать категорию"
 }
