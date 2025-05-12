@@ -14,7 +14,6 @@ import {
 } from "../../../../services/BookApi"
 import Modal from "../../../../components/admin/Modal"
 import { useGetCategoriesQuery } from "../../../../services/CategoryApi"
-import { Category } from "../Categories/index"
 import { SelectChangeEvent } from "@mui/material"
 
 export interface Book {
@@ -34,21 +33,34 @@ export interface Book {
   imagePath: string
   createdAt: string
 }
+
 const BookPage: React.FC = () => {
   const { t } = useTranslation()
+
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [searchTitle, setSearchTitle] = useState<string>("")
-  const { data: BookData, error, isLoading, refetch, } = useGetBooksQuery({ page: currentPage - 1, count: 10, title: searchTitle })
+
+  const {
+    data: BookData,
+    error,
+    isLoading,
+    refetch,
+  } = useGetBooksQuery({ page: currentPage - 1, count: 10, title: searchTitle })
+
   const { data: CategoryData } = useGetCategoriesQuery()
+
   const [addBook] = useAddBookMutation()
   const [updateBook] = useUpdateBookMutation()
   const [deleteBook] = useDeleteBookMutation()
-  const [books, setBooks] = useState<Book[]>([])
+
+  const [books, setBooks] = useState<any[]>([])
   const [editingBook, setEditingBook] = useState<Book | null>(null)
   const [editItem, setEditItem] = useState<Record<string, string>>({})
+
   useEffect(() => {
     setCurrentPage(1)
   }, [searchTitle])
+
   useEffect(() => {
     if (BookData?.list) {
       const formattedBooks = BookData.list.flat().map((book: Book, index: number) => ({
@@ -72,9 +84,14 @@ const BookPage: React.FC = () => {
               alt="delete"
               style={{ width: "20px", cursor: "pointer" }}
               onClick={async () => {
-                if (window.confirm(t("confirm_delete") || "Silmək istədiyinizə əminsiniz?")) {
+                if (
+                  window.confirm(
+                    t("confirm_delete") || "Silmək istədiyinizə əminsiniz?"
+                  )
+                ) {
                   try {
                     await deleteBook(book.id).unwrap()
+                    refetch()
                   } catch (err) {
                     console.error("Silinmə zamanı xəta:", err)
                   }
@@ -85,7 +102,7 @@ const BookPage: React.FC = () => {
       }))
       setBooks(formattedBooks)
     }
-  }, [BookData, deleteBook, t])
+  }, [BookData, deleteBook, refetch, t])
 
   useEffect(() => {
     if (editingBook && Object.keys(editItem).length === 0) {
@@ -109,16 +126,29 @@ const BookPage: React.FC = () => {
   const handleEditInputChange = (
     e: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent
   ): void => {
-    const { name, value } = e.target as HTMLInputElement | { name: string; value: string }
+    const { name, value } = e.target as HTMLInputElement & { name: string; value: string }
     setEditItem((prev) => ({ ...prev, [name]: value }))
   }
 
-
-  const handleAddBook = async (newBook: Partial<Book>, file?: File, image?: File): Promise<void> => {
-    if (!newBook.title || !newBook.author || newBook.publicationYear === undefined) return
+  const handleAddBook = async (
+    newBook: Partial<Book>,
+    file?: File,
+    image?: File
+  ): Promise<void> => {
+    const categoryId =
+      typeof newBook.categoryId === 'string'
+        ? parseInt(newBook.categoryId, 10)
+        : newBook.categoryId || 0
+    if (
+      !newBook.title ||
+      !newBook.author ||
+      newBook.publicationYear === undefined ||
+      !categoryId
+    )
+      return
 
     const formData = new FormData()
-    formData.append("categoryId", newBook.categoryId ? String(newBook.categoryId) : "")
+    formData.append("categoryId", categoryId.toString())
     formData.append("title", newBook.title)
     formData.append("author", newBook.author)
     formData.append("publicationYear", String(newBook.publicationYear))
@@ -132,6 +162,7 @@ const BookPage: React.FC = () => {
 
     try {
       await addBook(formData).unwrap()
+      refetch()
     } catch (err) {
       console.error(err)
     } finally {
@@ -140,15 +171,29 @@ const BookPage: React.FC = () => {
     }
   }
 
-  const handleUpdateBook = async (newBook: Partial<Book>, file?: File, image?: File): Promise<void> => {
-    if (!newBook.title || !newBook.author || newBook.publicationYear === undefined) return
-
+  const handleUpdateBook = async (
+    newBook: Partial<Book>,
+    file?: File,
+    image?: File
+  ): Promise<void> => {
     const bookId = editingBook?.id
     if (!bookId) return
 
+    const categoryId =
+      typeof newBook.categoryId === 'string'
+        ? parseInt(newBook.categoryId, 10)
+        : newBook.categoryId || 0
+    if (
+      !newBook.title ||
+      !newBook.author ||
+      newBook.publicationYear === undefined ||
+      !categoryId
+    )
+      return
+
     const formData = new FormData()
     formData.append("id", String(bookId))
-    formData.append("categoryId", String(newBook.categoryId || 0))
+    formData.append("categoryId", categoryId.toString())
     formData.append("title", newBook.title)
     formData.append("author", newBook.author)
     formData.append("publicationYear", String(newBook.publicationYear))
@@ -159,8 +204,10 @@ const BookPage: React.FC = () => {
     formData.append("publisher", newBook.publisher || "")
     formData.append("file", file || new File([editingBook.filePath], editingBook.filePath))
     formData.append("image", image || new File([editingBook.imagePath], editingBook.imagePath))
+
     try {
       await updateBook({ id: bookId, formData }).unwrap()
+      refetch()
     } catch (err) {
       console.error("Error updating book:", err)
     } finally {
@@ -201,12 +248,11 @@ const BookPage: React.FC = () => {
             label: t("categoryId"),
             type: "select",
             selectOptions:
-              CategoryData?.list.map((cat: Category) => ({
+              CategoryData?.list.map((cat) => ({
                 value: String(cat.id),
                 label: cat.bookCategory,
               })) || [],
           },
-          
           { name: "title", label: t("title"), type: "text" },
           { name: "author", label: t("author"), type: "text" },
           { name: "bookCode", label: t("bookCode"), type: "text" },
@@ -253,7 +299,7 @@ const BookPage: React.FC = () => {
             setEditingBook(null)
             setEditItem({})
           }}
-          handleSubmit={(_book: Partial<Book>, file?: File, image?: File): void => {
+          handleSubmit={(_book, file?, image?) => {
             void handleUpdateBook({ ...editingBook, ...editItem }, file, image)
           }}
           formFields={[
@@ -262,7 +308,7 @@ const BookPage: React.FC = () => {
               label: t("categoryId"),
               type: "select",
               selectOptions:
-                CategoryData?.list.map((cat: Category) => ({
+                CategoryData?.list.map((cat) => ({
                   value: String(cat.id),
                   label: cat.bookCategory,
                 })) || [],

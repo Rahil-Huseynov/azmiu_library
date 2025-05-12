@@ -8,7 +8,7 @@ export const categoryApi = createApi({
   tagTypes: ["Category"],
   endpoints: (builder) => ({
     getCategories: builder.query<PaginatedResponse<Category>, void>({
-      query: () => "categories/all",
+      query: () => "categories",
       providesTags: ["Category"],
     }),
     addCategory: builder.mutation<Category, Partial<Category>>({
