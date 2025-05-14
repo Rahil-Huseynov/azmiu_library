@@ -1,29 +1,50 @@
 import React from "react";
-import thumb from "../../../assets/images/thumb.jpeg";
 import "./index.scss";
 import Degree from "../degree";
+import defa from "../../../assets/svg/default.svg";
+import { useGetBooksQuery } from "../../../services/BookApi";
+import { useBookContext } from "../../../context/BookContext";
+import { useClientSidebar } from "../../../hooks/useClientSidebar";
 
 interface BookCartProps {
-  visibleCards: number; 
-  additionalClass?: string; 
-  showDegree?: boolean; 
+  visibleCards: number;
+  additionalClass?: string;
+  showDegree?: boolean;
 }
 
-const BookCart: React.FC<BookCartProps> = ({ visibleCards, additionalClass = "", showDegree = false }) => {
-  const books = Array.from({ length: 10 }, () => ({
-    name: "Digital Transformation",
-    author: "Paul Arvis",
-    image: thumb,
-  }));
+const BookCart: React.FC<BookCartProps> = ({
+  visibleCards,
+  additionalClass = "",
+  showDegree = false,
+}) => {
+  const { data: booksData } = useGetBooksQuery({});
+  const books = booksData?.list || [];
+  const { setSelectedBook } = useBookContext(); 
+  const { isClientSidebarOpen, toggleClientSidebar } = useClientSidebar(); 
+  const handleBookClick = (book: any) => {
+    setSelectedBook(book); 
+    if (!isClientSidebarOpen) {
+      toggleClientSidebar(); 
+    }
+  };
+
+
 
   return (
     <div className="book-carts">
-      {books.slice(0, visibleCards).map((book, index) => (
-        <div className={`book-cart ${additionalClass}`.trim()} key={index}>
+      {books.slice(0, visibleCards).map((book: any, index: number) => (
+        <div
+          className={`book-cart ${additionalClass}`.trim()}
+          key={index}
+          onClick={() => handleBookClick(book)} 
+        >
           {showDegree && <Degree variant="books" index={index} />}
-          <img src={book.image} alt="recommend-book" />
+          <img
+            src={book.imagePath ? book.imagePath : defa}
+            alt={book.title || "Book Image"}
+          />
           <div className="info">
-            <h5 className="book-name">{book.name}</h5>
+            <h5 className="book-name">{book.title}</h5>
             <p className="author-name">{book.author}</p>
           </div>
         </div>
@@ -31,6 +52,5 @@ const BookCart: React.FC<BookCartProps> = ({ visibleCards, additionalClass = "",
     </div>
   );
 };
-
 
 export default BookCart;

@@ -10,6 +10,7 @@ interface DegreeProps {
 const Degree: React.FC<DegreeProps> = ({ variant, index = 0 }) => {
   const { t } = useTranslation();
 
+
   const data =
     variant === "mainbook"
       ? [{ id: "degree-main", label: t("mostPopular") }]
@@ -18,6 +19,11 @@ const Degree: React.FC<DegreeProps> = ({ variant, index = 0 }) => {
           { id: "degree2", label: "8k " + t("reads") },
           { id: "degree3", label: "5k " + t("reads") },
         ];
+
+
+  if (variant !== "mainbook" && index >= 3) {
+    return null; 
+  }
 
   const current = variant === "mainbook" ? data[0] : data[index] || { label: t("reads") };
 

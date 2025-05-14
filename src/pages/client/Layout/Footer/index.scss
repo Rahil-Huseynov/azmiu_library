@@ -73,7 +73,7 @@
             }
         }
         .featured-book-image {
-            margin: auto;
+            margin: 0 auto;
             width: 185px;
             height: 280px;
             img {
@@ -90,6 +90,7 @@
             }
             .featured-book-subtitle {
                 text-align: center;
+                text-transform: capitalize;
                 font-size: 16px;
                 color: rgb(191 219 254);
             }
