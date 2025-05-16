@@ -10,8 +10,10 @@ import member_active_icon from "../../../../assets/icons/icons8-people-50.png";
 import HeaderAccount from "../../../../components/common/Header/index";
 import { ROUTES } from "../../../../utils/constant";
 import { useSidebar } from "../../../../hooks/usedSidebar";
+import { useTranslation } from "react-i18next";
 
 const ClientSideBar = () => {
+    const { t } = useTranslation();
   const { isSidebarOpen } = useSidebar();
 
   const clientSidebarItems = [
