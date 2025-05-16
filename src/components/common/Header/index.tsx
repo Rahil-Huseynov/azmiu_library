@@ -4,7 +4,6 @@ import azmiu from "../../../assets/icons/azmiu.webp";
 import dropdown from "../../../assets/icons/down-arrow.png";
 import dropdown_open_navbar from "../../../assets/icons/icons8-expand-arrow-50.png";
 import dropdown_item from "../../../assets/icons/arrow-down-sign-to-navigate.png";
-import azmiuLibrary from "../../../assets/svg/azmiu-library-logo.svg"
 import logout_icon from "../../../assets/icons/icons8-logout-50.png";
 import logout_icon_white from "../../../assets/icons/icons8-logout-50-white.png";
 import { useSidebar } from "../../../hooks/usedSidebar.ts";
@@ -18,11 +17,10 @@ import { SidebarItem } from "../../admin/Sidebar/SidebarWrapper/index.tsx";
 
 interface HeaderAccountProps {
     sidebarItems: SidebarItem[];
-    variant?: "admin" | "client";
 }
 
 
-const HeaderAccount: React.FC<HeaderAccountProps> = ({ sidebarItems, variant  }) => {
+const HeaderAccount: React.FC<HeaderAccountProps> = ({ sidebarItems  }) => {
     const { isSidebarOpen, toggleSidebar } = useSidebar();
     const { logout } = useAuth();
     const navigate = useNavigate();
@@ -55,8 +53,8 @@ const HeaderAccount: React.FC<HeaderAccountProps> = ({ sidebarItems, variant  })
             <div className={`Admin_Header_Container ${isSidebarOpen ? "scroll-left" : "scroll-left-1"}`}>
                 {/* Header Logo */}
                 <div className="Admin_Header_Container_Header">
-                    <img className="Admin_Header_Container_Header_AZMIU_Logo" src={variant === "client" ? azmiuLibrary: azmiu} alt="azmiu" />
-                    <p className="Admin_Header_Container_Header_Name">{variant === "client" ? t("azmiuLibrary") : t("universityName")}</p>
+                    <img className="Admin_Header_Container_Header_AZMIU_Logo" src={ azmiu} alt="azmiu" />
+                    <p className="Admin_Header_Container_Header_Name">{t("universityName")}</p>
                     <img
                         className="Admin_Header_Container_Header_Dropdown"
                         src={dropdown}

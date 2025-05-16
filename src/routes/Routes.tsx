@@ -10,6 +10,7 @@ import BookPage from "../pages/admin/Pages/Book";
 import CategoriesPage from "../pages/admin/Pages/Categories";
 import MembersPage from "../pages/admin/Pages/Members/index.tsx";
 import Error from "../components/common/Error/index.tsx";
+import MiddleClientPage from "../pages/client/Layout/Main/MiddleSection/index.tsx";
 
 const ProtectedRoute = ({
                             children,
@@ -92,8 +93,10 @@ export const routes = createBrowserRouter([
             </ProtectedRoute>
         ),
         children: [
-            { index: true, element: <h1></h1> },
-            // ... other client routes
+            { index: true, element: <></>  },
+             { path: ROUTES.HOME.slice(1), element: <MiddleClientPage/> },
+            { path: ROUTES.DASHBOARD_CATEGORIES.slice(1), element: <></> },
+            { path: ROUTES.DASHBOARD_MEMBERS.slice(1), element:<></> }
         ]
     },
     {

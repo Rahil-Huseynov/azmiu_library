@@ -1,6 +1,9 @@
 import "./index.scss";
 import { t } from "i18next";
 import book_icon from "../../../../assets/icons/icons8-book-50.png";
+import discover from "../../../../assets/svg/discover.svg";
+import library from "../../../../assets/svg/library.svg";
+import favorites from "../../../../assets/svg/favorites.svg";
 import member_icon from "../../../../assets/icons/icons8-member-50.png";
 import book_active_icon from "../../../../assets/icons/icons8-book-64.png";
 import member_active_icon from "../../../../assets/icons/icons8-people-50.png";
@@ -13,9 +16,9 @@ const ClientSideBar = () => {
 
   const clientSidebarItems = [
     {
-      path: `${ROUTES.DASHBOARD_CLIENT}${ROUTES.DASHBOARD_BOOKS}`,
+      path: `${ROUTES.DASHBOARD_CLIENT}${ROUTES.HOME}`,
       label: t("discover"),
-      icon: book_icon,
+      icon: discover,
       activeIcon: book_active_icon,
     },
     {
@@ -27,13 +30,13 @@ const ClientSideBar = () => {
     {
       path: `${ROUTES.DASHBOARD_CLIENT}${ROUTES.DASHBOARD_MEMBERS}`,
       label: t("myLibrary"),
-      icon: member_icon,
+      icon: library,
       activeIcon: member_active_icon,
     },
     {
       path: `${ROUTES.DASHBOARD_CLIENT}${ROUTES.DASHBOARD_MEMBERS}`,
       label: t("favorites"),
-      icon: member_icon,
+      icon: favorites,
       activeIcon: member_active_icon,
     },
   ];
@@ -45,7 +48,7 @@ const ClientSideBar = () => {
           isSidebarOpen ? "sidebar-open" : "sidebar-closed"
         }`}
       >
-        <HeaderAccount variant="client" sidebarItems={clientSidebarItems} />
+        <HeaderAccount sidebarItems={clientSidebarItems} />
       </div>
     </>
   );
