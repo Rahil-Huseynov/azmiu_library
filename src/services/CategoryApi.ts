@@ -11,13 +11,13 @@ export const categoryApi = createApi({
       query: () => "categories",
       providesTags: ["Category"],
     }),
-    addCategory: builder.mutation<Category, Partial<Category>>({
-      query: (newCategory) => ({
-        url: "categories",
-        method: "POST",
-        body: newCategory,
+    addCategory: builder.mutation<Category, FormData>({
+      query: formData => ({
+        url: '/categories',
+        method: 'POST',
+        body: formData,
       }),
-      invalidatesTags: ["Category"],
+      invalidatesTags: [{ type: 'Category', id: 'LIST' }],
     }),
     deleteCategory: builder.mutation({
       query: (id) => ({

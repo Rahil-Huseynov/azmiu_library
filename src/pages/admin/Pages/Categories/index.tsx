@@ -12,10 +12,11 @@ export interface Category {
   id?: string;
   bookCategory: string;
   status: string;
+  image?: string | File;
 }
 
 const CategoriesPage = () => {
-  const { data: categoriesData, isLoading, error } = useGetCategoriesQuery();
+  const { data: categoriesData, isLoading, error,refetch } = useGetCategoriesQuery();
   const categories = categoriesData?.list || [];
   const { t } = useTranslation();
   const [formattedCategories, setFormattedCategories] = useState<any[]>([]);
@@ -28,13 +29,28 @@ const CategoriesPage = () => {
 
   const handleAddCategory = async (newCategory: Partial<Category>) => {
     if (!newCategory.bookCategory) return;
+
+    const formData = new FormData();
+    formData.append( "categoryRequest", JSON.stringify({ bookCategory: newCategory.bookCategory }));
+    formData.append("image", newCategory.image || new Blob([], { type: "text/plain" }))
     try {
-      await addCategory(newCategory).unwrap();
+      await addCategory(formData).unwrap();
+      refetch()
     } catch (err) {
       console.error("Error adding category:", err);
     }
   };
-
+  const getStringOnlyData = (data: Partial<Category>): Record<string, string> => {
+    const result: Record<string, string> = {};
+    for (const key in data) {
+      const value = data[key as keyof Category];
+      if (typeof value === 'string') {
+        result[key] = value;
+      }
+    }
+    return result;
+  };
+  
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement> | SelectChangeEvent
   ) => {
@@ -53,7 +69,6 @@ const CategoriesPage = () => {
 
   const handleSaveCategory = () => {
     if (!editingCategory) return;
-    // TODO: implement updateCategory mutation
     setEditingCategory(null);
   };
 
@@ -115,6 +130,7 @@ const CategoriesPage = () => {
         ]}
         formFields={[
           { name: 'bookCategory', label: t('categoryname'), type: 'text' },
+          { name: 'image', label: t('image'), type: 'file' },
         ]}
         items={formattedCategories}
         onAddItem={handleAddCategory}
@@ -146,8 +162,9 @@ const CategoriesPage = () => {
           handleSubmit={handleSaveCategory}
           formFields={[
             { name: 'bookCategory', label: t('categoryname'), type: 'text' },
+            { name: 'image', label: t('image'), type: 'file' },
           ]}
-          newItem={editCategoryData}
+          newItem={getStringOnlyData(editCategoryData)}
           add_item={t('edit_category')}
           add_new_item={t('edit_category')}
           handleInputChange={handleInputChange}

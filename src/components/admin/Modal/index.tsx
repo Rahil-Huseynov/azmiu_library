@@ -1,4 +1,3 @@
-// src/components/admin/Modal.tsx
 import React, { ChangeEvent, FC, useState } from 'react';
 import './index.scss';
 import { TextField, Button, MenuItem, Select, InputLabel, FormControl, SelectChangeEvent } from '@mui/material';
@@ -21,7 +20,7 @@ export interface FormField {
     name: string;
     label: string;
     type: string;
-    selectOptions?: { value: string; label: string }[];  // for select fields
+    selectOptions?: { value: string; label: string }[];  
 }
 
 interface ModalProps {
@@ -53,7 +52,6 @@ const Modal: FC<ModalProps> = ({ isOpen, closeModal, handleSubmit, formFields, n
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         handleSubmit(newItem, file || undefined, image || undefined);
-        // reset inputs
         formFields.forEach(field => {
             handleInputChange({ target: { name: field.name, value: '' } } as any);
         });
