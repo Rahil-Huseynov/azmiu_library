@@ -31,8 +31,8 @@ const CategoriesPage = () => {
     if (!newCategory.bookCategory) return;
 
     const formData = new FormData();
-    formData.append( "categoryRequest", JSON.stringify({ bookCategory: newCategory.bookCategory }));
-    formData.append("image", newCategory.image || new Blob([], { type: "text/plain" }))
+    formData.append("bookCategory",  newCategory.bookCategory );
+    formData.append("imagePath", newCategory.image || new Blob([], { type: "text/plain" }))
     try {
       await addCategory(formData).unwrap();
       refetch()
