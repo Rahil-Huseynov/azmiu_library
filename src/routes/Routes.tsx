@@ -10,7 +10,12 @@ import BookPage from "../pages/admin/Pages/Book";
 import CategoriesPage from "../pages/admin/Pages/Categories";
 import MembersPage from "../pages/admin/Pages/Members/index.tsx";
 import Error from "../components/common/Error/index.tsx";
+// import MiddleClientPage from "../pages/client/Layout/Main/MiddleSection/index.tsx";
+import DiscoverPage from "../pages/client/pages/Discover/index.tsx";
+import ClientCategoriesPage from "../pages/client/pages/Categories/index.tsx";
 import MiddleClientPage from "../pages/client/Layout/Main/MiddleSection/index.tsx";
+import LibraryPage from "../pages/client/pages/MyLibrary/index.tsx";
+import FavoritesPage from "../pages/client/pages/FavoritesPage/index.tsx";
 
 const ProtectedRoute = ({
                             children,
@@ -93,10 +98,11 @@ export const routes = createBrowserRouter([
             </ProtectedRoute>
         ),
         children: [
-            { index: true, element: <></>  },
-             { path: ROUTES.HOME.slice(1), element: <MiddleClientPage/> },
-            { path: ROUTES.DASHBOARD_CATEGORIES.slice(1), element: <></> },
-            { path: ROUTES.DASHBOARD_MEMBERS.slice(1), element:<></> }
+            { index: true, element: <MiddleClientPage /> },
+             { path: ROUTES.DASHBOARD_CLIENT_DISCOVER.slice(1), element: <MiddleClientPage/> },
+            { path: ROUTES.DASHBOARD_CLIENT_CATEGORIES.slice(1), element: <ClientCategoriesPage /> },
+            { path: ROUTES.DASHBOARD_CLIENT_LIBRARY.slice(1), element:<LibraryPage /> },
+            { path: ROUTES.DASHBOARD_CLIENT_FAVORITES.slice(1), element:<FavoritesPage/> },
         ]
     },
     {

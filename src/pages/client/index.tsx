@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Layout/Header";
-import MiddleClientPage from "./Layout/Main/MiddleSection";
+// import MiddleClientPage from "./Layout/Main/MiddleSection";
 import "./index.scss";
 import ClientRightSide from "./Layout/Footer";
 import { ClientSidebarProvider } from "../../context/ClientSidebarContext";
@@ -12,7 +12,8 @@ const ClientLayout = () => {
       <ClientSidebarProvider>
         <div className="Client-page">
           <Header />
-          <MiddleClientPage />
+          {/* <MiddleClientPage /> */}
+          {/* <DiscoverPage /> */}
           <Outlet />
           <ClientRightSide />
         </div>
